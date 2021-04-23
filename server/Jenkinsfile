@@ -1,0 +1,61 @@
+pipeline {
+  agent none
+  options { skipDefaultCheckout(true) }
+  stages {
+    stage('Build and Test') {
+      agent {
+        docker {
+          image 'maven:3-alpine'
+          args '-v /root/.m2:/root/.m2'
+        }
+      }
+      options { skipDefaultCheckout(false) }
+        steps {
+          sh 'mvn -B -DskipTests -f ./backend/pom.xml clean package'
+        }
+    }
+    stage('Docker Build') {
+      agent any
+      steps {
+        sh 'docker build -t illeum-front:latest ./frontend'
+        sh 'docker build -t illeum-back:latest ./backend'
+        
+      }
+    }
+    stage('Docker Container rm') {
+      agent any 
+      steps {
+        sh 'docker ps -f name=illeum-front -q | xargs --no-run-if-empty docker container stop'
+        sh 'docker container ls -a -name=illeum-front -q | xargs -r docker container rm'
+
+        sh 'docker ps -f name=illeum-back -q | xargs --no-run-if-empty docker container stop'  
+        sh 'docker container ls -a -name=illeum-back -q | xargs -r docker container rm'
+        
+        sh 'docker ps -a -f "status=created" -f "status=exited" -q | xargs -r docker container rm'
+        sh 'docker images -f "dangling=true" -q | xargs -r docker rmi'
+      }
+    }
+    
+    stage('Docker run') {
+      agent any
+      steps {
+        sh 'docker run -d --name illeum-front \
+            -p 80:80 \
+            -p 443:443 \
+            -v /volumes/front_home:/volumes \
+            -v /volumes/back_home/profile:/volumes/profile \
+            -v /volumes/front_home/log:/var/log/nginx/host.access.log \
+            --network illeum-network \
+             illeum-front:latest'
+
+        sh 'docker run -d --name illeum-back \
+            -v /volumes/back_home:/volumes/profile \
+            -v /etc/localtime:/etc/localtime:ro \
+            -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
+            --network illeum-network \
+            illeum-back:latest' 
+        
+       }
+    }
+  }
+}
