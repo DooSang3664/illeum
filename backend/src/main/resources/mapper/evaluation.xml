@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="com.ssafy.pjt.repository.mapper.EvaluationMapper">
+	<!--방의 맴버 조회 -->
+	<select id="seachEvaluation" parameterType="int"
+		resultType="Evaluation">
+		SELECT *
+		FROM evaluation e
+		RIGHT JOIN entrant t
+		ON e.eid = t.eid
+		JOIN room r
+		ON r.rid = t.rid
+		WHERE e.eid = #{eid}
+		AND (DATE_FORMAT(e.attend_time,'%H:%i:%s') BETWEEN
+		DATE_FORMAT(r.start_time ,'%H:%i:%s') AND DATE_FORMAT(r.end_time
+		,'%H:%i:%s'))
+		AND DATE(NOW()) = DATE(e.attend_time);
+	</select>
+	<select id="roomEntrantInfo" parameterType="insertRoomEvaluationDto"
+		resultType="map">
+		select m.uid, m.name, m.email, ev.vid, ev.eid
+		, DATE_FORMAT(ev.eval_date,'%Y-%m-%d %H:%i:%s') as eval_date
+		, ev.attention, ev.participation, ev.distracted, ev.asleep, ev.afk
+		,  DATE_FORMAT(ev.attend_time,'%Y-%m-%d %H:%i:%s') as attend_time
+		, ev.ranking, ev.attend
+		from member m join entrant e
+		on m.uid = e.uid and e.rid = #{rid}
+		join evaluation ev
+		on e.eid = ev.eid
+		<trim prefix="where" suffixOverrides="and"  suffix=";">
+			<if test= "isLate == 1">ev.attend = "지각" and</if>
+			<if test= "isAbsent == 1">ev.attend = "결석" and</if>
+			<if test= "isAttendFirst == 1">ev.ranking=1 and</if>
+			<if test= "isChatFirst == 1">ev.participation = (select max(evv.participation) 
+										from room rr join entrant ee 
+										on ee.rid = rr.rid
+										join evaluation evv 
+										on ee.eid = evv.eid
+										where rr.rid = #{rid}) and</if>
+		</trim>
+	</select>
+
+</mapper>

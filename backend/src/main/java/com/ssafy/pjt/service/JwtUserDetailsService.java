@@ -1,7 +1,7 @@
 package com.ssafy.pjt.service;
 
-import com.ssafy.pjt.Repository.MemberRepository;
 import com.ssafy.pjt.dto.Member;
+import com.ssafy.pjt.repository.MemberRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;

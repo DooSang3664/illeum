@@ -1,61 +1,108 @@
 pipeline {
-  agent none
-  options { skipDefaultCheckout(true) }
-  stages {
-    stage('Build and Test') {
-      agent {
-        docker {
-          image 'maven:3-alpine'
-          args '-v /root/.m2:/root/.m2'
-        }
-      }
-      options { skipDefaultCheckout(false) }
-        steps {
-          sh 'mvn -B -DskipTests -f ./backend/pom.xml clean package'
-        }
-    }
-    stage('Docker Build') {
-      agent any
-      steps {
-        sh 'docker build -t illeum-front:latest ./frontend'
-        sh 'docker build -t illeum-back:latest ./backend'
-        
-      }
-    }
-    stage('Docker Container rm') {
-      agent any 
-      steps {
-        sh 'docker ps -f name=illeum-front -q | xargs --no-run-if-empty docker container stop'
-        sh 'docker container ls -a -name=illeum-front -q | xargs -r docker container rm'
+	agent none
+	options { skipDefaultCheckout(true) }
+	stages {
+		stage('Build and Test') {
+			agent {
+				docker {
+				  image 'maven:3-alpine'
+				  args '-v /root/.m2:/root/.m2'
+				}
+			}
+			options { skipDefaultCheckout(false) }
+			steps {
+				script{
+					mattermostSend (
+						color: "#2A42EE", 
+						message: "빌드 시작: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+					)
+				}
+				sh 'mvn -B -DskipTests -f ./backend/pom.xml clean package'
+			}
+		}
+		stage('Docker Build') {
+			agent any
+			steps {
+				sh 'docker build -t illeum-front:latest ./frontend'
+				sh 'docker build -t illeum-back:latest ./backend'
+				sh 'docker build -t illeum-ai:latest ./AI'
+				sh 'docker build -t illeum-webrtc:latest ./webRTC'
+			}
+		}
+		stage('Docker Container rm') {
+			agent any 
+			steps {
+				sh 'docker ps -f name=illeum-front -q | xargs --no-run-if-empty docker container stop'
+				sh 'docker container ls -a -name=illeum-front -q | xargs -r docker container rm'
+				
+				sh 'docker ps -f name=illeum-back -q | xargs --no-run-if-empty docker container stop'  
+				sh 'docker container ls -a -name=illeum-back -q | xargs -r docker container rm'
+				
+				sh 'docker ps -f name=illeum-ai -q | xargs --no-run-if-empty docker container stop'  
+				sh 'docker container ls -a -name=illeum-ai -q | xargs -r docker container rm'
+				
+				sh 'docker ps -f name=illeum-webrtc -q | xargs --no-run-if-empty docker container stop'  
+				sh 'docker container ls -a -name=illeum-webrtc -q | xargs -r docker container rm'
 
-        sh 'docker ps -f name=illeum-back -q | xargs --no-run-if-empty docker container stop'  
-        sh 'docker container ls -a -name=illeum-back -q | xargs -r docker container rm'
-        
-        sh 'docker ps -a -f "status=created" -f "status=exited" -q | xargs -r docker container rm'
-        sh 'docker images -f "dangling=true" -q | xargs -r docker rmi'
-      }
-    }
-    
-    stage('Docker run') {
-      agent any
-      steps {
-        sh 'docker run -d --name illeum-front \
-            -p 80:80 \
-            -p 443:443 \
-            -v /volumes/front_home:/volumes \
-            -v /volumes/back_home/profile:/volumes/profile \
-            -v /volumes/front_home/log:/var/log/nginx/host.access.log \
-            --network illeum-network \
-             illeum-front:latest'
+				sh 'docker ps -a -f "status=created" -f "status=exited" -q | xargs -r docker container rm'
+				sh 'docker images -f "dangling=true" -q | xargs -r docker rmi'
+			}
+		}
+		
+		stage('Docker run') {
+			agent any
+			steps {
+			sh 'docker run -d --name illeum-front \
+				-p 80:80 \
+				-p 443:443 \
+				-v /volumes/front_home:/volumes \
+				-v /volumes/back_home/profile:/volumes/profile \
+				-v /volumes/front_home/log:/var/log/nginx/host.access.log \
+				--network illeum-network \
+				 illeum-front:latest'
 
-        sh 'docker run -d --name illeum-back \
-            -v /volumes/back_home:/volumes/profile \
-            -v /etc/localtime:/etc/localtime:ro \
-            -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
-            --network illeum-network \
-            illeum-back:latest' 
-        
-       }
-    }
-  }
+			sh 'docker run -d --name illeum-back \
+				-v /volumes/back_home:/volumes \
+				-v /etc/localtime:/etc/localtime:ro \
+				-v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
+				--network illeum-network \
+				-p 8080:8080 \
+				illeum-back:latest' 
+			
+			sh 'docker run -d --name illeum-ai \
+				-v /volumes/AI_home:/volumes \
+				-v /etc/localtime:/etc/localtime:ro \
+				-v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
+				--network illeum-network \
+				-p 8000:8000 \
+				illeum-ai:latest' 
+				
+			sh 'docker run -d --name illeum-webrtc \
+				-v /etc/localtime:/etc/localtime:ro \
+				-v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro \
+				-v /volumes/front_home/key:/volumes/key \
+				--network illeum-network \
+				-p 9001:9001 \
+				illeum-webrtc:latest' 
+			}
+		}
+	}
+	post {
+		success {
+			script{
+				mattermostSend (
+					color: "good", 
+					message: "빌드 성공: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+				)
+			}
+		}
+		failure {
+			script{
+				mattermostSend (
+					color: "danger", 
+					message: "빌드 실패: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Link to build>)"
+				)
+			}
+		}
+	}
 }

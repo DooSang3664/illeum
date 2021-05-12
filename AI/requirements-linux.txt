@@ -1,0 +1,17 @@
+fastapi
+sqlalchemy
+gitpython
+tensorflow-cpu
+opencv-python-headless
+bidict
+uvicorn
+httptools
+asyncio
+tqdm
+uuid
+python-multipart
+python-dateutil
+mysql-connector-python
+numpy
+cachetools
+pika

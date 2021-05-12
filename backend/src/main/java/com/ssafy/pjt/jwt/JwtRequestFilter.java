@@ -1,6 +1,5 @@
 package com.ssafy.pjt.jwt;
 
-import com.ssafy.pjt.dto.Token;
 import com.ssafy.pjt.service.JwtUserDetailsService;
 
 import io.jsonwebtoken.ExpiredJwtException;
@@ -8,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,7 +15,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -29,7 +28,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 
 @Component
@@ -48,8 +46,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     public Authentication getAuthentication(String token) {
         Map<String, Object> parseInfo = jtu.getUserParseInfo(token);
-        System.out.println("parseinfo: " + parseInfo);
-        List<String> rs =(List)parseInfo.get("role");
+        logger.info("parseinfo: " + parseInfo);
+        List<String> rs =(List)parseInfo.get("role"); //NOSONAR
         Collection<GrantedAuthority> tmp= new ArrayList<>();
         for (String a: rs) {
             tmp.add(new SimpleGrantedAuthority(a));
@@ -61,8 +59,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     }
 
     @Bean
-    public FilterRegistrationBean JwtRequestFilterRegistration (JwtRequestFilter filter) {
-        FilterRegistrationBean registration = new FilterRegistrationBean(filter);
+    public FilterRegistrationBean JwtRequestFilterRegistration (JwtRequestFilter filter) { //NOSONAR
+        FilterRegistrationBean registration = new FilterRegistrationBean(filter);  //NOSONAR
         registration.setEnabled(false);
         return registration;
     }
@@ -71,7 +69,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
 
-        System.out.println("REQUEST : " + request.getHeader("Authorization"));
+        logger.info("REQUEST : " + request.getHeader("Authorization"));
         String requestTokenHeader = request.getHeader("Authorization");
 
         logger.info("tokenHeader: " + requestTokenHeader);

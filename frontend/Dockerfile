@@ -1,4 +1,5 @@
-FROM node as build-stage
+FROM getcurrentthread/node:0.0.1 as build-stage
+# FROM node as build-stage
 WORKDIR /homepage
 COPY package*.json ./
 

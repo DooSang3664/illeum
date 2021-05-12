@@ -1,14 +1,16 @@
 package com.ssafy.pjt.dto;
 
 import lombok.Data;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import javax.persistence.*;
-import java.util.Date;
+
+import java.time.LocalDateTime;
 
 @Data
 @Entity
+@SuppressWarnings("all")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -16,15 +18,21 @@ public class Room {
     
     private int uid;
     
-    @Column(nullable=false, length=45)
+    @Column(name = "room_name", nullable=false, length=45)
     private String roomName;
     
-    @CreationTimestamp
-    private Date startTime;
+    @Column(nullable=false, length=45)
+    private String roomPassword;
     
-    @UpdateTimestamp
-    private Date endTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime startTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
+    private LocalDateTime endTime;
+    
+    @Column(nullable=false, length=45)
+    private String roomState;
+    
+    @Column(nullable=false, length=45)
+    private String roomType;
 
-    private String state;
-  
 }

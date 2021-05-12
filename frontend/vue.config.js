@@ -1,14 +1,22 @@
 module.exports = {
   lintOnSave: false,
-  productionSourceMap: false, 
-  filenameHashing: true, 
-  publicPath: '', 
+  productionSourceMap: false,
+  filenameHashing: true,
+  publicPath: '',
 
   devServer: {
-    hot: true, 
+    hot: true,
     proxy: {
       '/api': {
-        target: 'http://localhost:8080',
+        target: 'https://k4d106.p.ssafy.io',
+        // target: 'http://k4d106.p.ssafy.io:8080',
+      },
+      '/api/face': {
+        target: 'http://k4d106.p.ssafy.io:8000',
+        // changeOrigin: true,
+      },
+      '/profile': {
+        target: 'https://k4d106.p.ssafy.io',
       },
     },
   },
