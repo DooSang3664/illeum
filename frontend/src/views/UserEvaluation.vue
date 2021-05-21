@@ -1,7 +1,20 @@
 <template>
   <div id="user-eval">
-    <v-alert type="info" elevation="3" color="#304FFE" style="margin-top:10%; width:60vw;">
-      <header>{{ this.$store.state.name }}의 평가</header>
+    <v-alert
+      class="text-start font-weight-black"
+      border="left"
+      dark
+      color="#2E95FF"
+      style="font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      elevation="3"
+      height="70"
+      width="1400"
+    >
+      <span>
+        <v-icon>mdi-account-check</v-icon>
+        {{ $store.state.name }}
+      </span>
+      님의 평가
     </v-alert>
     <v-tabs v-model="tab" background-color="transparent" color="basil" slider-size="1">
       <v-tab>
@@ -15,19 +28,19 @@
       </v-tab>
     </v-tabs>
 
-    <v-tabs-items v-model="tab">
+    <v-tabs-items v-model="tab" style="background:#f9f9f9;">
       <v-tab-item>
-        <v-card color="basil" flat>
+        <v-card flat color="#f9f9f9">
           <UserAttend></UserAttend>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card color="basil" flat>
+        <v-card flat color="#f9f9f9">
           <UserEval></UserEval>
         </v-card>
       </v-tab-item>
       <v-tab-item>
-        <v-card color="basil" flat>
+        <v-card flat color="#f9f9f9">
           <UserPartin></UserPartin>
         </v-card>
       </v-tab-item>
@@ -53,7 +66,15 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 #user-eval {
-  margin: auto;
+  margin: 3% 2%;
+  font-family: 'NEXON Lv1 Gothic OTF';
 }
 </style>

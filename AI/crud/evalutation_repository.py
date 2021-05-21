@@ -33,8 +33,8 @@ def select_entrant_eid_by_uid_and_rid(uid: int, rid: int) -> Optional[int]:
     return None
 
 
-@cached(cache=CustomTTLCache(maxsize=1024, ttl=600))
-def select_evaluation_vid_recent_by_eid(eid: int):
+@cached(cache=CustomTTLCache(maxsize=1024, ttl=200))
+def select_evaluation_vid_recent_by_eid(eid: int) -> Optional[int]:
     with db.query("SELECT vid FROM evaluation WHERE eid = %s ORDER BY eval_date DESC LIMIT 1", (eid,)) as cursor:
         data = cursor.fetchone()
         if data:
@@ -42,24 +42,32 @@ def select_evaluation_vid_recent_by_eid(eid: int):
     return None
 
 
-def update_evaluation_increase_column_by_eid(column: str, eid: int) -> None:
-    db.query(f"UPDATE evaluation SET {column} = {column} + 1 WHERE eid = %s", (eid,))
+def update_evaluation_increase_column_by_eid(column: str, vid: int) -> None:
+    db.query(f"UPDATE evaluation SET {column} = {column} + 1 WHERE vid = %s", (vid,))
 
 
 def update_evaluation_increase_attention_by_eid(eid: int) -> None:
-    update_evaluation_increase_column_by_eid("attention", eid)
+    vid: Optional[int] = select_evaluation_vid_recent_by_eid(eid)
+    if vid:
+        update_evaluation_increase_column_by_eid("attention", vid)
 
 
 def update_evaluation_increase_distracted_by_eid(eid: int) -> None:
-    update_evaluation_increase_column_by_eid("distracted", eid)
+    vid: Optional[int] = select_evaluation_vid_recent_by_eid(eid)
+    if vid:
+        update_evaluation_increase_column_by_eid("distracted", vid)
 
 
 def update_evaluation_increase_asleep_by_eid(eid: int) -> None:
-    update_evaluation_increase_column_by_eid("asleep", eid)
+    vid: Optional[int] = select_evaluation_vid_recent_by_eid(eid)
+    if vid:
+        update_evaluation_increase_column_by_eid("asleep", vid)
 
 
 def update_evaluation_increase_afk_by_eid(eid: int) -> None:
-    update_evaluation_increase_column_by_eid("afk", eid)
+    vid: Optional[int] = select_evaluation_vid_recent_by_eid(eid)
+    if vid:
+        update_evaluation_increase_column_by_eid("afk", vid)
 
 
 if __name__ == "__main__":

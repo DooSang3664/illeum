@@ -13,7 +13,7 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: ['#43a047', '#fb8c00', '#e53935', '#00acc1'],
+            backgroundColor: ['#FF625C', '#41EA93', '#61D4ED', '#756BFF', '#2E95FF'],
             data: [],
           },
         ],

@@ -1,161 +1,78 @@
 <template>
   <div class="manage">
+    <v-alert
+      class="text-start font-weight-black"
+      border="left"
+      dark
+      id="alert"
+      color="#2E95FF"
+      style="font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      elevation="3"
+      height="70"
+    >
+      <span>
+        <v-icon>mdi-account-check</v-icon>
+        {{ $store.state.name }}
+      </span>
+      님의 평가관리
+    </v-alert>
     <v-row>
-      <v-container>{{ this.$store.state.uuid }}의 학생관리</v-container>
-      <v-date-picker v-model="date" @click:date="classNameFetch" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker>
-      <!-- <v-date-picker v-model="date" :landscape="true" locale="ko-kr" :allowed-dates="allowedDates" class="mt-4" min="1900-04-01" max="2100-10-30"></v-date-picker> -->
+      <p class="guide-text">
+        <strong style="letter-spacing:1px">①날짜를 체크하고 ②클래스를 선택</strong>
+        하면 해당 클래스에 참여한 수강생들의 평가데이터를 조회하실 수 있습니다.
+      </p>
     </v-row>
     <v-row>
-      <div style="margin-top: 100px;">
-        <h2>show Management</h2>
-        <h2>{{ date }}</h2>
-      </div>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="6">
-        <v-select :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
-        <!-- <v-select :items="roomNameList" :label="date" solo></v-select> -->
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="4">
-        <div class="table-body">
-          <div class="table_responsive">
-            <table>
-              <thead>
-                <tr>
-                  <th scope="col">No</th>
-                  <th scope="col">PROFILE</th>
-                  <th scope="col">NAME</th>
-                  <th scope="col">E-MAIL</th>
-                  <th scope="col">Evaluation</th>
-                  <th scope="col">Attendance</th>
-                  <th scope="col">date</th>
-                  <th scope="col">attend</th>
-                  <th scope="col">ranking</th>
-                  <th scope="col">participation</th>
-                  <th scope="col">모달</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr v-for="(each, idx) in userEval" :key="idx">
-                  <td>{{ idx + 1 }}</td>
-                  <td><v-img :src="`https://k4d106.p.ssafy.io/profile/${each.uid}/256`" id="preview" style="width:50px; height:50px;" alt=""></v-img></td>
-                  <td>{{ each.name }}</td>
-                  <td>{{ each.email }}</td>
-                  <td>Evaluation</td>
-                  <td>Attendance</td>
-                  <td>{{ each.attend_time }}</td>
-                  <td>{{ each.attend }}</td>
-                  <td>{{ each.ranking | checkChatRanking }}</td>
-                  <td>{{ each.participation }}회 채팅</td>
-
-                  <td>
-                    <v-dialog v-model="dialog" persistent max-width="1200px">
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn color="primary" dark v-bind="attrs" v-on="on">
-                          DETAIL
-                        </v-btn>
-                      </template>
-                      <v-card>
-                        <v-card-title>
-                          <span class="headline">
-                            <span>{{ each.name }}님의</span>
-                            Evaluation
-                          </span>
-                        </v-card-title>
-                        <v-card-text>
-                          <v-container>
-                            <v-card>
-                              <v-toolbar flat color="primary" dark>
-                                <v-toolbar-title>
-                                  <span>{{ each.name }}님의</span>
-                                  Evaluation
-                                </v-toolbar-title>
-                              </v-toolbar>
-                              <v-tabs vertical>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-account
-                                  </v-icon>
-                                  출결
-                                </v-tab>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-lock
-                                  </v-icon>
-                                  학습태도
-                                </v-tab>
-                                <v-tab>
-                                  <v-icon left>
-                                    mdi-access-point
-                                  </v-icon>
-                                  참여현황
-                                </v-tab>
-
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <h2>출결</h2>
-                                    <h3>출석시간:{{ each.attend_time }}</h3>
-                                    <h3>지각여부:{{ each.attend }}</h3>
-                                  </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <LecUserEval :each="each" :rid="ridSelected"></LecUserEval>
-                                  </v-card>
-                                </v-tab-item>
-                                <v-tab-item>
-                                  <v-card flat>
-                                    <LecUserPartin :each="each" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="ridSelected"></LecUserPartin>
-                                  </v-card>
-                                </v-tab-item>
-                              </v-tabs>
-                            </v-card>
-                          </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                          <v-spacer></v-spacer>
-                          <v-btn color="blue darken-1" text @click="dialog = false">
-                            Close
-                          </v-btn>
-                        </v-card-actions>
-                      </v-card>
-                    </v-dialog>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+      <v-col cols="6" sm="6">
+        <div class="class-label">
+          <v-icon color="white">mdi-calendar-today</v-icon>
+          날짜선택
         </div>
+        <v-date-picker
+          width="400"
+          style="height:82%; margin-left:-25%;"
+          color="#FF625C"
+          v-model="date"
+          @click:date="classNameFetch"
+          :landscape="true"
+          :allowed-dates="allowedDates"
+          :weekday-format="getDay"
+          :month-format="getMonth"
+          :header-date-format="headerDate"
+          :title-date-format="titleDate"
+          class="mt-4"
+          min="1900-04-01"
+          max="2100-10-30"
+        ></v-date-picker>
       </v-col>
-      <!-- 필터검색 -->
-      <v-col cols="12" sm="4" class="chip-search">
-        <v-card class="mx-auto" max-width="300">
-          <v-toolbar flat color="transparent">
-            <v-toolbar-title>빠른검색</v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-btn icon @click="$refs.search.focus()">
-              <v-icon>mdi-magnify</v-icon>
-            </v-btn>
-          </v-toolbar>
+      <v-col cols="6" sm="6">
+        <div class="class-label class-choice">
+          <v-icon color="white">mdi-school-outline</v-icon>
+          수업선택
+        </div>
+        <v-select style="margin-left:2%;" placeholder="클래스를 선택해주세요" :items="roomNameList" :value="roomNameList[0]" solo @input="showAll"></v-select>
+        <v-col cols="12">
+          <v-card class="mx-auto mt-0 " max-width="800">
+            <v-toolbar flat color="rgb(255, 98, 92)" class="" style="padding:0.1rem; color:#fff;">
+              <v-toolbar-title style="letter-spacing: 1px;">
+                <v-icon color="#fff">mdi-account-search-outline</v-icon>
+                빠른검색
+              </v-toolbar-title>
+            </v-toolbar>
 
-          <v-container class="py-0">
-            <v-row align="center" justify="start">
-              <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
-                <!-- <v-chip :disabled="loading" close @click:close="selected.splice(i, 1)"> -->
-                <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
-                  <v-icon left v-text="selection.icon"></v-icon>
-                  {{ selection.text }}
-                </v-chip>
-              </v-col>
-            </v-row>
-          </v-container>
+            <v-container class="py-1">
+              <v-row align="center" justify="start">
+                <v-col v-for="(selection, i) in selections" :key="selection.text" class="shrink">
+                  <v-chip :disabled="loading" close @click:close="chipClose(selection, i)">
+                    <v-icon left v-text="selection.icon"></v-icon>
+                    {{ selection.text }}
+                  </v-chip>
+                </v-col>
+              </v-row>
+            </v-container>
 
-          <v-divider v-if="!allSelected"></v-divider>
+            <v-divider v-if="!allSelected"></v-divider>
 
-          <v-list>
             <template v-for="item in categories">
               <v-list-item v-if="!selected.includes(item)" :key="item.text" :disabled="loading" @click="showSelected(item)">
                 <v-list-item-avatar>
@@ -164,12 +81,122 @@
                 <v-list-item-title v-text="item.text"></v-list-item-title>
               </v-list-item>
             </template>
-          </v-list>
 
-          <v-divider></v-divider>
-        </v-card>
+            <!-- <v-divider></v-divider> -->
+          </v-card>
+        </v-col>
       </v-col>
     </v-row>
+    <!-- <h2>{{ date }}</h2> -->
+
+    <v-row>
+      <div class="table-body">
+        <div class="table_responsive">
+          <table>
+            <thead>
+              <tr>
+                <th scope="col">No</th>
+                <th scope="col">PROFILE</th>
+                <th scope="col">이름</th>
+                <th scope="col">E-MAIL</th>
+
+                <th scope="col">수업시간</th>
+                <th scope="col">참여시간</th>
+                <th scope="col">채팅참여순위</th>
+                <th scope="col">채팅횟수</th>
+                <th scope="col">평가조회</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="(each, idx) in userEval" :key="idx">
+                <td>{{ idx + 1 }}</td>
+
+                <td>
+                  <v-avatar class="mb-3" color="grey darken-1" size="50">
+                    <v-img :src="`/profile/${each.uid}/256`" id="preview" alt=""></v-img>
+                  </v-avatar>
+                </td>
+                <td>{{ each.name }}</td>
+                <td>{{ each.email }}</td>
+
+                <td>{{ each.attend_time }}</td>
+                <td>{{ each.attend }}</td>
+                <td>{{ each.ranking | checkChatRanking }}</td>
+                <td>{{ each.participation }}회 채팅</td>
+                <td><v-btn color="#FF625C" depressed dark @click="openModal(each)">평가조회</v-btn></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </v-row>
+
+    <!-- modal -->
+    <v-dialog v-if="$store.state.token" v-model="dialog" hide-overlay max-width="900px">
+      <v-card flat>
+        <v-toolbar flat color="#2E95FF " dark>
+          <v-toolbar-title>
+            <span>{{ modalEach.name }}님의</span>
+            평가조회
+          </v-toolbar-title>
+        </v-toolbar>
+        <v-tabs vertical>
+          <v-tab>
+            <v-icon left>
+              mdi-account
+            </v-icon>
+            출결
+          </v-tab>
+          <v-tab>
+            <v-icon left>
+              mdi-lock
+            </v-icon>
+            학습태도
+          </v-tab>
+          <v-tab>
+            <v-icon left>
+              mdi-access-point
+            </v-icon>
+            참여현황
+          </v-tab>
+
+          <v-tab-item>
+            <v-card flat>
+              <div style="margin:1rem 0; ">
+                <v-icon left large style="margin-bottom:1rem;" color="#2E95FF">
+                  mdi-alarm
+                </v-icon>
+                <span style="font-size:2rem; color:#2E95FF ;">{{ modalEach.attend_time }}</span>
+                에 출석하셨습니다!
+              </div>
+              <div>
+                출결상태는
+                <span :class="{ normal: modalEach.attend == '정상', late: modalEach.attend == '지각', afk: modalEach.attend == '결석' }" style="font-size:2rem;">{{ modalEach.attend }}</span>
+                입니다.
+              </div>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item :key="modalEach.vid + 'A'">
+            <v-card flat color="">
+              <LecUserEval :each="modalEach" :rid="ridSelected"></LecUserEval>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item :key="modalEach.vid + 'B'">
+            <v-card flat>
+              <LecUserPartin :each="modalEach" :roomData="roomData" :evalUserCnt="userEvalLength" :rid="ridSelected"></LecUserPartin>
+            </v-card>
+          </v-tab-item>
+        </v-tabs>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn color="blue darken-1" text @click="dialog = false">
+            Close
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -179,6 +206,10 @@ import LecUserPartin from '@/views/evaluation/LecUserPartin';
 
 import { fetchCondition } from '@/api/evaluation';
 import { findByUidClass } from '@/api/class';
+
+const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+const monthsOfYear = ['1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월'];
+
 export default {
   components: {
     LecUserEval,
@@ -199,6 +230,7 @@ export default {
       roomNameList: [], // for select box list
       userEval: [], // for table list
       userEvalLength: '', // for table list length
+      modalEach: {}, // for modal value
 
       userEvalAll: [],
 
@@ -288,6 +320,22 @@ export default {
     }
   },
   methods: {
+    titleDate(date) {
+      return monthsOfYear[new Date(date).getMonth(date)] + ' ' + new Date(date).getDate(date) + '일 <br/>' + daysOfWeek[new Date(date).getDay(date)] + '요일';
+    },
+    getDay(date) {
+      return daysOfWeek[new Date(date).getDay(date)];
+    },
+    getMonth(date) {
+      return monthsOfYear[new Date(date).getMonth(date)];
+    },
+    headerDate(date) {
+      return new Date(date).getFullYear(date) + ' ' + monthsOfYear[new Date(date).getMonth(date)];
+    },
+    openModal(each) {
+      this.modalEach = each;
+      this.dialog = true;
+    },
     allowedDates(val) {
       for (var i = 0; i < this.dateList.length; i++) {
         if (this.dateList[i].date == val) {
@@ -304,7 +352,6 @@ export default {
       this.selected = [];
 
       for (let index = 0; index < this.dateList.length; index++) {
-        console.log(this.dateList[index]);
         if (this.dateList[index].date == this.date) {
           this.roomNameList.push(this.dateList[index].classInfo.roomName);
           this.ridSelected = this.dateList[index].classInfo.rid;
@@ -317,11 +364,9 @@ export default {
       this.userEvalLength = '';
       this.roomData.room_name = roomName;
       for (let i = 0; i < this.dateList.length; i++) {
-        console.log(this.dateList[i]);
         if (this.dateList[i].classInfo.roomName == roomName) {
           if (this.dateList[i].date == this.date) {
             for (let j = 0; j < this.dateList[i].data.length; j++) {
-              console.log(this.dateList[i].data[j]);
               if (this.dateList[i].data[j].attend_time.slice(0, 10) == this.date) {
                 this.userEval.push(this.dateList[i].data[j]);
               }
@@ -330,6 +375,7 @@ export default {
         }
       }
       this.userEvalLength = this.userEval.length;
+      console.log(this.userEvalLength);
     },
     async getList(chipCheck) {
       this.userEval = [];
@@ -341,7 +387,6 @@ export default {
       await fetchCondition({ rid: this.ridSelected, isAbsent, isLate, isAttendFirst, isChatFirst }).then(({ data }) => {
         for (let i = 0; i < data.length; i++) {
           if (this.date == data[i].attend_time.slice(0, 10)) {
-            console.log(data[i]);
             this.userEval.push(data[i]);
           }
         }
@@ -380,24 +425,24 @@ export default {
 };
 </script>
 <style scoped>
-.manage {
-  margin: auto;
-  margin-left: 30%;
-  /* width: 100%;
-  padding: 25px 30px 30px 30px;
-  border-radius: 5px;
-  background: #fff; */
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
 }
-/* table */
 
-/* * {
-  box-sizing: border-box;
-} */
-
+.manage {
+  margin: 3% 2%;
+  font-family: 'NEXON Lv1 Gothic OTF';
+}
+.table-body {
+  min-width: 100%;
+}
 .table_responsive {
-  width: 150%;
+  width: 100%;
   padding: 15px;
-  overflow: auto;
+  /* overflow: auto; */
   margin: auto;
   border-radius: 4px;
 }
@@ -411,7 +456,7 @@ table {
 }
 
 table > thead {
-  background-color: #1976d2;
+  background-color: #2e95ff;
   color: #fff;
 }
 
@@ -421,8 +466,9 @@ table > thead th {
 
 table th,
 table td {
-  border: 1px solid #00000017;
-  padding: 10px 15px;
+  border: 1px solid #0000;
+  padding: 10px 5px;
+  text-align: center;
 }
 
 table > tbody > tr > td > img {
@@ -432,7 +478,7 @@ table > tbody > tr > td > img {
   object-fit: cover;
   border-radius: 50%;
   border: 4px solid #fff;
-  box-shadow: 0 2px 6px #0003;
+  box-shadow: 0 2px 6px #000;
 }
 
 .action_btn {
@@ -475,9 +521,63 @@ table > tbody > tr:nth-child(even) {
 }
 
 table > tbody > tr:hover {
-  filter: drop-shadow(0px 2px 6px #0002);
+  filter: drop-shadow(0px 5px 10px #0002);
 }
 .chip-search {
   margin-left: 10em;
+}
+.class-label {
+  width: 30%;
+  height: 3rem;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  background: rgb(255, 98, 92);
+  border: 0px solid black;
+  border-radius: 50px;
+
+  padding: 12px 1rem;
+  margin-right: 1rem;
+  color: white;
+  border-top-left-radius: 0px;
+  border-bottom-left-radius: 0px;
+}
+.guide-text {
+  margin: 2% auto;
+}
+.class-choice {
+  margin-left: 0.8rem;
+  margin-bottom: 1rem;
+}
+.late {
+  background: #ff9c6c;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+
+  color: white;
+}
+.afk {
+  background: #fc5230;
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+
+  color: white;
+}
+.normal {
+  background: rgb(46, 149, 255);
+  border: 0px solid black;
+  border-radius: 25px;
+  font-size: 1rem;
+  width: 30%;
+  height: 60%;
+  padding: 0.5rem 3rem;
+  color: white;
 }
 </style>

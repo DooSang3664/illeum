@@ -1,11 +1,30 @@
 <template>
   <div>
     <div>
-      <div>{{ each.name }}님</div>
-      <div>{{ roomData.room_name }} 수업에서 수업참여도</div>
-      <div>총 수강생 {{ evalUserCnt }}명중에 {{ partuidRank }}위입니다</div>
-      <div>{{ roomData.room_name }} 수업에서 출석을</div>
-      <div>총 수강생 {{ evalUserCnt }}명중에 {{ attenduidRank }}위입니다</div>
+      <div v-if="afkchk == false" style="display:flex; justify-content:center; flex-direction:column; margin:2rem 0;">
+        <div class="partin-each">
+          <span style="font-size:1.5rem;">{{ roomData.room_name }}수업</span>
+          에서 총
+          <span style="font-size:1.5rem;">{{ evalUserCnt }}명</span>
+          중
+        </div>
+        <div class="partin-each">
+          <span style="color:#756BFF; font-size:1.5rem; font-weight: bold;">수업참여도</span>
+          는
+          <span style="color:#756BFF; font-size:1.5rem; font-weight: bold;">{{ partuidRank }}위</span>
+          입니다
+        </div>
+
+        <div class="partin-each">
+          <span style="color:#FF625C; font-size:1.5rem; font-weight: bold;">출석</span>
+          은
+          <span style="color:#FF625C; font-size:1.5rem; font-weight: bold;">{{ attenduidRank }}위</span>
+          입니다
+        </div>
+      </div>
+      <div v-else>
+        <span style="font-size:1.5rem; margin:auto;">결석한 학생입니다.</span>
+      </div>
     </div>
   </div>
 </template>
@@ -36,6 +55,8 @@ export default {
       firstUser: '',
       fetchRoomlen: 0,
       evalcheck: false,
+      zeroPartinchk: false,
+      afkchk: false,
     };
   },
   props: {
@@ -46,46 +67,40 @@ export default {
       type: Object,
     },
     evalUserCnt: {
-      type: Number,
+      type: String,
     },
     rid: {
       type: Number,
     },
   },
   async created() {
-    console.log(this.evalUserCnt);
-    console.log(this.roomData);
-
     this.evalcheck = true;
     this.partinRank = [];
     this.attendRank = [];
     this.fetchRoomlen = 0;
+    this.afkchk = false;
     const res = await evaluateList(this.rid);
-
+    console.log(res.data);
+    console.log(this.each);
     var maxPartin = 0;
     var first = 100000;
     //채팅참여도1등, 출석1등 구하기
     console.log(res.data);
     for (var j = 0; j < res.data.length; j++) {
-      this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation });
-      // attendRank push 메소드 시간순으로 정렬됨
-      this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
-      console.log(this.attendRank);
-      this.attendRank.sort(function(a, b) {
-        return a.attend_time < b.attend_time ? -1 : a.attend_time > b.attend_time ? 1 : 0;
-      });
-      if (maxPartin < res.data[j].participation) {
-        var maxPartin = res.data[j].participation;
-        this.maxUser = res.data[j].name;
-      }
+      if (res.data[j].eval_date.slice(0, 10) == this.each.eval_date.slice(0, 10)) {
+        this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation, vid: res.data[j].vid });
+        this.attendRank.push({ uid: res.data[j].uid, attend_time: res.data[j].attend_time });
+        if (maxPartin < res.data[j].participation) {
+          var maxPartin = res.data[j].participation;
+          this.maxUser = res.data[j].name;
+        }
 
-      if (first > res.data[j].ranking) {
-        var first = res.data[j].ranking;
-        this.firstUser = res.data[j].name;
-      }
-      if (this.each.uid === res.data[j].uid) {
-        this.name = this.$store.state.name;
-        this.fetchRoomlen = res.data.length;
+        if (this.each.uid == res.data[j].uid && res.data[j].attend == '결석') {
+          this.afkchk = true;
+        }
+        if (this.each.uid == res.data[j].uid) {
+          this.attenduidRank = res.data[j].ranking;
+        }
       }
     }
     //채팅참여도 배열 제일 많은순으로 정렬하기
@@ -102,19 +117,25 @@ export default {
 
     //로그인한 청강자 채팅참여도 순위 구하기
     for (var k = 0; k < this.partinRank.length; k++) {
-      if (this.partinRank[k].uid === this.each.uid) {
+      if (this.partinRank[k].uid === this.each.uid && this.partinRank[k].vid === this.each.vid) {
         this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
-      }
-    }
-    //로그인한 청강자 출석시간 순위 구하기
-    console.log(this.attendRank);
-    for (var m = 0; m < this.attendRank.length; m++) {
-      if (this.attendRank[m].uid === this.each.uid) {
-        this.attenduidRank = this.attendRank.indexOf(this.attendRank[m]) + 1;
+        break;
+      } else if (this.partinRank[k].uid === this.$store.state.uuid && this.partinRank[k].participation == 0) {
+        this.zeroPartinchk = true;
       }
     }
   },
 };
 </script>
 
-<style></style>
+<style scoped>
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: 'NEXON Lv1 Gothic OTF';
+}
+</style>

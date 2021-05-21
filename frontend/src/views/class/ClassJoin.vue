@@ -1,6 +1,11 @@
 <template>
   <div class="classJoin">
-    <h2>클래스 리스트 목록</h2>
+    <v-alert class="text-start font-weight-black" border="left" dark color="#2E95FF" style="font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;" elevation="3" height="70">
+      <span>
+        <v-icon>mdi-account-check</v-icon>
+        수강신청 리스트
+      </span>
+    </v-alert>
     <v-data-table
       :headers="headers"
       :items="rooms"
@@ -17,9 +22,6 @@
         'items-per-page-text': '페이지당 클래스수',
       }"
     ></v-data-table>
-    <v-btn @click="main">
-      홈으로
-    </v-btn>
   </div>
 </template>
 <script>
@@ -34,6 +36,7 @@ export default {
           value: 'room_name',
         },
         { text: '강의자', value: 'founder' },
+        { text: '프로필', value: 'founder_uid' },
         { text: '시작시간', value: 'start_time' },
         { text: '방상태', value: 'room_state' },
         { text: '공개/비공개', value: 'room_type' },
@@ -98,9 +101,12 @@ export default {
           const { data } = await insertRoom(insertInfo);
           if (data != null) {
             this.$swal({
-              icon: 'success',
-              title: '클래스 참여 완료.!!',
-              confirmButtonText: `확인`,
+              icon: 'warning',
+              showCancelButton: true,
+              title: '해당 수업을 신청을 하겠습니까?',
+              cancelButtonColor: '#d33',
+              confirmButtonText: '확인',
+              cancelButtonText: '취소',
             });
           }
         } catch {
@@ -115,7 +121,15 @@ export default {
 };
 </script>
 <style scoped>
+@font-face {
+  font-family: 'GongGothicLight';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .classJoin {
-  margin: auto;
+  margin: 3% 2%;
+  font-family: 'GongGothicLight';
 }
 </style>

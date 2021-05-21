@@ -5,7 +5,7 @@ export function setInterceptors(instance) {
   instance.interceptors.request.use(
     function(config) {
       // Do something before request is sent
-      config.headers['x-auth-token'] = store.state.token; //요청시 토큰 셋팅
+      config.headers['Authorization'] = 'Bearer ' + store.state.token; //요청시 토큰 셋팅
       return config;
     },
     function(error) {

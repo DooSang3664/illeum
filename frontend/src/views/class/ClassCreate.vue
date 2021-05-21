@@ -1,5 +1,20 @@
 <template>
   <div class="classCreate">
+    <v-alert
+      class="text-start font-weight-black"
+      border="left"
+      dark
+      color="#2E95FF"
+      id="alert"
+      style="font-size: 1.5rem; letter-spacing: 2.3px; padding-left:20px; line-height: 45px;"
+      elevation="3"
+      height="70"
+    >
+      <span>
+        <v-icon>mdi-account-check</v-icon>
+        클래스만들기
+      </span>
+    </v-alert>
     <validation-observer ref="observer">
       <form @submit.prevent="submit">
         <!-- room_name -->
@@ -45,20 +60,20 @@
                   <v-text-field :value="start_room_time | timeFilter" label="시작시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </template>
-              <v-time-picker scrollable color="green lighten-1" v-if="start_time_menu" v-model="start_room_time" @click:minute="$refs.start_time_menu.save(start_room_time)"></v-time-picker>
+              <v-time-picker scrollable color="#2E95FF" v-if="start_time_menu" v-model="start_room_time" @click:minute="$refs.start_time_menu.save(start_room_time)"></v-time-picker>
             </v-menu>
           </v-col>
         </v-row>
 
         <!-- hours add buttons -->
         <div v-if="start_room_time != '' && start_room_date != ''">
-          <v-btn class="mr-4" @click="addHour(1)">
+          <v-btn class="mr-4" @click="addHour(1)" color="#41EA93" dark>
             1시간 추가
           </v-btn>
-          <v-btn class="mr-4" @click="addHour(2)">
+          <v-btn class="mr-4" @click="addHour(2)" color="#41EA93" dark>
             2시간 추가
           </v-btn>
-          <v-btn class="mr-4" @click="addHour(3)">
+          <v-btn class="mr-4" @click="addHour(3)" color="#41EA93" dark>
             3시간 추가
           </v-btn>
         </div>
@@ -100,7 +115,7 @@
                   <v-text-field :value="end_room_time | timeFilter" label="종료시간" prepend-icon="mdi-clock-time-four-outline" readonly v-on="on" :error-messages="errors"></v-text-field>
                 </validation-provider>
               </template>
-              <v-time-picker scrollable v-if="end_time_menu" v-model="end_room_time" full-width @click:minute="$refs.end_time_menu.save(end_room_time)"></v-time-picker>
+              <v-time-picker color="#2E95FF" scrollable v-if="end_time_menu" v-model="end_room_time" full-width @click:minute="$refs.end_time_menu.save(end_room_time)"></v-time-picker>
             </v-menu>
           </v-col>
         </v-row>
@@ -117,14 +132,11 @@
           <v-text-field v-model="room_password" :counter="10" :error-messages="errors" label="방 비밀번호"></v-text-field>
         </validation-provider>
 
-        <v-btn class="mr-4" type="submit">
+        <v-btn class="mr-4" color="#2E95FF" dark type="submit">
           submit
         </v-btn>
-        <v-btn class="mr-4" @click="clear">
+        <v-btn class="mr-4" color="#2E95FF" dark @click="clear">
           clear
-        </v-btn>
-        <v-btn @click="back">
-          홈으로
         </v-btn>
       </form>
     </validation-observer>
@@ -262,7 +274,7 @@ export default {
               toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
             },
           });
-          this.$router.push({ name: 'ClassList' });
+          this.$router.push({ name: 'WebRTCListTeacher' });
         }
       } catch {
         this.$swal({
@@ -276,7 +288,20 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'GongGothicLight';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10@1.0/GongGothicLight.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 .classCreate {
-  margin: auto;
+  margin: 3% 2%;
+  font-family: 'GongGothicLight';
+}
+form {
+  border: 2px solid rgb(73, 72, 72);
+  border-radius: 20px;
+  padding: 1rem 3rem;
+  background: #f6f6f6;
 }
 </style>

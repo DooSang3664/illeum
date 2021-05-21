@@ -1,90 +1,21 @@
 <template>
   <div id="landing2">
-    <div class="content">
-      <div class="section1">
-        <img src="@/assets/img/finallogo.png" class="logo" alt="logo" />
+    <div class="section1">
+      <img src="@/assets/img/finallogo_2.png" class="logo" alt="logo" />
 
-        <h1>
-          일름에서 원격수업의 해답을 찾다.
-        </h1>
-        <div class="text-box">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae qui accusamus tempora esse aliquam in impedit aut placeat sunt cumque animi nemo sapiente fuga, sed obcaecati ducimus nisi
-            sit veritatis?
-          </p>
-        </div>
-        <div class="buttons">
-          <button class="button-guide" @click="homeGo">TEST</button>
-          <button class="button-start" @click="startGo">START</button>
-        </div>
+      <h1>
+        일름에서 원격수업의 해답을 찾다.
+      </h1>
+      <div class="text-box">
+        <p style="color: #4e4e4e;">
+          온라인 수업에 적극적으로 참여할 수 있는 다양한 학습지원기능을 제공하여,
+          <br />
+          어디서든 교실과 차이 없는 온라인 수업이 가능한 교육환경을 제공합니다.
+        </p>
       </div>
-      <div class="section2">
-        <h2>Lorem ipsum dolor sit, amet consectetur</h2>
-        <div class="text-box">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum velit iste voluptatum, maiores dicta doloribus eius consectetur neque deleniti praesentium voluptates placeat repudiandae
-            assumenda vel sunt reprehenderit veritatis repellat numquam.
-          </p>
-        </div>
-        <div class="section2a">
-          <img src="@/assets/img/onlinestudy.jpeg" class="monitor" alt="computer" />
-          <div class="explanation">
-            <div>
-              <h3>출결관리</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
-              </p>
-            </div>
-            <div>
-              <h3>학습관리</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
-              </p>
-            </div>
-            <div>
-              <h3>참여도</h3>
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim magni veritatis, expedita maiores error.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="section3">
-        <h2>Lorem ipsum dolor sit amet consectetur adipisicing elit</h2>
-        <div class="text-box">
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Officiis ipsum adipisci fugit delectus voluptatum? Distinctio nihil eveniet corrupti vitae ex nemo dolore. Unde saepe,
-            necessitatibus ab iure voluptatum nemo molestiae?
-          </p>
-        </div>
-        <LandingComp></LandingComp>
-      </div>
-      <div class="section4">
-        <h2>AI학습관리</h2>
-        <div class="text-box"><p class="subtitle">Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores ut eveniet ab veniam hic et, distinctio reprehenderit</p></div>
-        <ul class="features">
-          <li>
-            <em class="fa fa-3x fa-address-book"></em>
-            <h3>집중</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-          </li>
-          <li>
-            <em class="fa fa-3x fa-address-book"></em>
-            <h3>딴짓</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-          </li>
-          <li>
-            <em class="fa fa-3x fa-address-book"></em>
-            <h3>졸음</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-          </li>
-          <li>
-            <em class="fa fa-3x fa-address-book"></em>
-            <h3>자리비움</h3>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laudantium aut,</p>
-          </li>
-        </ul>
+      <div class="buttons">
+        <button class="button-guide" @click="homeGo">GUIDE</button>
+        <button class="button-start" @click="startGo">START</button>
       </div>
     </div>
   </div>
@@ -96,20 +27,35 @@ export default {
   components: {
     LandingComp,
   },
+
   methods: {
     homeGo() {
-      this.$router.push('/home');
+      this.$router.push('/guide');
     },
     startGo() {
-      this.$router.push('/sign');
+      if (this.$store.getters.isLogin) {
+        this.$router.push({ name: 'MyClass' });
+      } else {
+        this.$router.push({ name: 'Sign' });
+      }
     },
   },
 };
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Bai+Jamjuree:wght@400;600&display=swap');
-
+@font-face {
+  font-family: 'NEXON Lv2 Gothic Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv2 Gothic Bold.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 :root {
   --cyan: hsl(171, 66%, 44%);
   --lightblue: hsl(233, 100%, 69%);
@@ -118,7 +64,7 @@ export default {
 }
 
 #landing2 {
-  font-family: 'Bai Jamjuree', sans-serif;
+  font-family: 'NEXON Lv2 Gothic Bold', 'Bai Jamjuree', sans-serif;
   margin: 0;
   padding: 0;
   background-color: #fff;
@@ -156,13 +102,17 @@ export default {
 }
 
 .text-box {
-  width: 600px;
+  width: 50%;
+  margin-top: 1%;
+  font-family: 'S-CoreDream-3Light';
+  color: #2c2b2b;
 }
 
 .section1 h1 {
-  color: hsl(210, 10%, 33%);
+  color: #4e4e4e;
   margin-bottom: 5px;
   font-size: 2.5em;
+  letter-spacing: 2px;
 }
 
 .section1 p {
@@ -175,12 +125,14 @@ export default {
 .buttons {
   display: flex;
   flex-direction: row;
+  margin-top: 2%;
+  margin-bottom: 10.5%;
   column-gap: 15px;
   padding-top: 15px;
 }
 
 .button-guide {
-  background-color: hsl(171, 66%, 44%);
+  background-color: #756bff;
   color: white;
   border-radius: 30px;
   letter-spacing: 3px;
@@ -190,16 +142,16 @@ export default {
   font-size: 1em;
   font-family: 'Bai Jamjuree', sans-serif;
   cursor: pointer;
-  box-shadow: 0px 2px 0px hsl(171, 66%, 35%);
+  box-shadow: 0px 2px 0px #756bff;
 }
 
 .button-guide:hover {
-  box-shadow: 0px 2px 5px hsl(171, 66%, 35%);
+  box-shadow: 0px 2px 5px #756bff;
   letter-spacing: 3px;
 }
 
 .button-start {
-  background-color: hsl(233, 100%, 69%);
+  background-color: #ff625c;
   color: white;
   border-radius: 30px;
   border: none;
@@ -208,192 +160,12 @@ export default {
   font-size: 1em;
   font-family: 'Bai Jamjuree', sans-serif;
   cursor: pointer;
-  box-shadow: 0px 2px 0px hsl(233, 45%, 43%);
+  box-shadow: 0px 2px 0px #ff625c;
   letter-spacing: 3px;
 }
 
 .button-start:hover {
-  box-shadow: 0px 2px 5px hsl(233, 45%, 43%);
+  box-shadow: 0px 2px 5px #ff625c;
   letter-spacing: 3px;
-}
-
-.section2 {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  padding-top: 50px;
-}
-
-.section2a {
-  text-align: left;
-  line-height: 1.5em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 30px;
-  margin-right: 350px;
-}
-
-.monitor {
-  height: 550px;
-  margin-top: 30px;
-}
-
-.explanation {
-  margin-left: 100px;
-  margin-top: -30px;
-  width: 325px;
-}
-
-h2 {
-  color: hsl(210, 10%, 33%);
-  font-size: 2em;
-}
-
-.section2 h3 {
-  color: hsl(210, 10%, 33%);
-  font-size: 1.5em;
-  padding-top: 20px;
-}
-
-.section2 p {
-  margin-top: 10px;
-  color: hsl(201, 11%, 66%);
-  font-size: 1em;
-  line-height: 2em;
-}
-
-.section3 {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 100px;
-}
-
-.section3 p {
-  margin-top: 0px;
-  color: hsl(201, 11%, 66%);
-  font-size: 1em;
-  line-height: 2em;
-}
-
-.tablet {
-  margin-top: 70px;
-  width: 800px;
-}
-
-.section4 {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 50px;
-}
-
-.subtitle {
-  margin-top: -10px;
-  color: var(--grey-blue);
-  font-size: 1em;
-  line-height: 2em;
-}
-
-.features {
-  padding: 0;
-  margin: 0;
-  display: flex;
-  align-items: flex-start;
-  margin-top: 30px;
-  justify-content: center;
-}
-
-.features h3 {
-  color: hsl(210, 10%, 33%);
-  font-size: 1.5em;
-  padding-top: 20px;
-}
-.features li {
-  list-style-type: none;
-  width: 330px;
-  margin: 0 15px;
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  flex-direction: column;
-}
-
-.blacklist {
-  height: 35px;
-}
-
-.fa .fa-address-book {
-  height: 50px;
-}
-
-.text {
-  height: 35px;
-}
-
-.features p {
-  line-height: 2em;
-  margin-top: 0px;
-  color: hsl(201, 11%, 66%);
-  font-size: 1em;
-}
-
-.companies {
-  flex-wrap: wrap;
-  justify-content: center;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  margin-top: 70px;
-}
-
-.companies li {
-  list-style-type: none;
-  width: 130px;
-  height: 100px;
-  margin: 0 50px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.companies img {
-  position: relative;
-}
-
-.section5 {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-  margin-top: 50px;
-  margin-bottom: 100px;
-}
-
-.section5 p {
-  margin-top: 0px;
-  color: hsl(201, 11%, 66%);
-  font-size: 1em;
-  line-height: 2em;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  flex-wrap: wrap;
-}
-
-.section5 div {
-  margin-top: 30px;
 }
 </style>

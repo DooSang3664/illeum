@@ -36,7 +36,7 @@ public class ImageService {
 
 	
 	public ImageService(@Value("${custom.domain-data-url}") String uploadPath) {
-		logger.info("PATH :: " + uploadPath);
+		logger.info("PATH : {}", uploadPath);
 		this.rootLocation = Paths.get(uploadPath);
 	}
 

@@ -76,7 +76,7 @@ public class MemberController {
 	@PostMapping(path = "/user/login")
 	public ResponseEntity<Object> login(@RequestBody LoginDto login) { // NOSONAR
 		final String email = login.getEmail();
-		logger.info("test input username: " + email);
+		logger.info("test input username: {}", email);
 		// 있는지 없는지 확인
 		if (memberRepository.findByEmail(email) == null)
 			return new ResponseEntity<>("not register", HttpStatus.OK);
@@ -99,8 +99,8 @@ public class MemberController {
 		ValueOperations<String, Object> vop = redisTemplate.opsForValue();
 		vop.set(email, retok);
 
-		logger.info("generated access token: " + accessToken);
-		logger.info("generated refresh token: " + refreshToken);
+		logger.info("generated access token: {}",  accessToken);
+		logger.info("generated refresh token: {}", refreshToken);
 		Map<String, Object> map = new HashMap<>();
 		map.put(ACCESSTOKEN, accessToken);
 		map.put("refreshToken", refreshToken);
@@ -136,7 +136,7 @@ public class MemberController {
 		}
 
 		// cache logout token for 10 minutes!
-		logger.info(" logout ing : " + accessToken);
+		logger.info(" logout ing : {}", accessToken);
 		redisTemplate.opsForValue().set(accessToken, true);
 		redisTemplate.expire(accessToken, 10 * 6 * 1000, TimeUnit.MILLISECONDS);
 
@@ -202,6 +202,7 @@ public class MemberController {
 			return new ResponseEntity<>(FAIL, HttpStatus.NO_CONTENT);
 		} catch (ExpiredJwtException e) { // expire됐을 때
 			email = e.getClaims().getSubject();
+			logger.info("username from expired access token: {}" , email);
 			return new ResponseEntity<>(FAIL, HttpStatus.NO_CONTENT);
 		}
 
@@ -220,13 +221,13 @@ public class MemberController {
 		admin.deleteQueue(queueName);
 
 		// cache logout token for 10 minutes!
-		logger.info(" logout ing : " + accessToken);
+		logger.info(" logout ing : {}" , accessToken);
 		redisTemplate.opsForValue().set(accessToken, true);
 		redisTemplate.expire(accessToken, 10 * 6 * 1000, TimeUnit.MILLISECONDS);
 
-		logger.info("delete user: " + email);
+		logger.info("delete user: {}" , email);
 		Long result = memberRepository.deleteByEmail(email);
-		logger.info("delete result: " + result);
+		logger.info("delete result: {}" , result);
 
 		return new ResponseEntity<>(SUCCESS, HttpStatus.OK);
 
@@ -357,16 +358,9 @@ public class MemberController {
 		try {
 			accessToken = m.get(ACCESSTOKEN);
 			refreshToken = m.get("refreshToken");
-			logger.info("access token in rnat: " + accessToken);
-			try {
-				email = jwtTokenUtil.getUsernameFromToken(accessToken);
-			} catch (IllegalArgumentException e) {
+			logger.info("access token in rnat: {}" , accessToken);
 
-			} catch (ExpiredJwtException e) { // expire됐을 때
-				logger.info("만료된 토큰 이였습니다");
-				email = e.getClaims().getSubject();
-				logger.info("username from expired access token: " + email);
-			}
+			email = jwtTokenUtil.getUsernameFromToken(accessToken);
 
 			if (refreshToken != null) { // refresh를 같이 보냈으면.
 
@@ -374,7 +368,7 @@ public class MemberController {
 				Token result = (Token) vop.get(email);
 				refreshTokenFromDb = result.getRefreshToken();
 
-				logger.info("rtfrom db: " + refreshTokenFromDb);
+				logger.info("rtfrom db: {}", refreshTokenFromDb);
 
 				// 둘이 일치하고 만료도 안됐으면 재발급 해주기.
 				if (refreshToken.equals(refreshTokenFromDb) && !jwtTokenUtil.isTokenExpired(refreshToken)) {
@@ -391,10 +385,14 @@ public class MemberController {
 				map.put("msg", "your refresh token does not exist.");
 			}
 
+		} catch (ExpiredJwtException e) { // expire됐을 때
+			logger.info("만료된 토큰 이였습니다");
+			email = e.getClaims().getSubject();
+			logger.info("username from expired access token: {}" , email);
 		} catch (Exception e) {
 			throw new ServletException(e);
 		}
-		logger.info("m: " + m);
+		logger.info("m: {}" , m);
 
 		return map;
 	}

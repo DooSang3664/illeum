@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import { loginUser } from '@/api/auth';
 import router from '@/router/index';
+import { notification } from '@/api/alert';
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -13,7 +14,6 @@ export default new Vuex.Store({
     name: '',
     uuid: '',
     role: '',
-    alertSocket: '',
   },
   getters: {
     isLogin(state) {
@@ -21,13 +21,6 @@ export default new Vuex.Store({
     },
   },
   mutations: {
-    // allert rabbitmq socket
-    setAlertSocket(state, alertSocket) {
-      state.alertSocket = alertSocket;
-    },
-    clearAlertSocket(state) {
-      state.alertSocket.close();
-    },
     //토큰
     setToken(state, token) {
       state.token = token;
@@ -69,6 +62,16 @@ export default new Vuex.Store({
   },
 
   actions: {
+    async LOGOUT({ commit }) {
+      localStorage.clear();
+      sessionStorage.clear();
+      commit('clearToken');
+      commit('clearUuid');
+      commit('clearEmail');
+      commit('clearRole');
+      commit('clearName');
+      notification().disconnect(); //disconnect
+    },
     async LOGIN({ commit }, userData) {
       await loginUser(userData)
         .then(({ data }) => {
@@ -88,6 +91,7 @@ export default new Vuex.Store({
             commit('setEmail', data.member.email);
             commit('setName', data.member.name);
             commit('setRole', data.member.role);
+            notification(data.member.uid);
             router.push('/myclass');
           }
         })

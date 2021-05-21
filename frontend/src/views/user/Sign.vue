@@ -1,6 +1,6 @@
 <template>
   <div class="sign">
-    <img src="@/assets/img/textlogo.png" alt="logo" />
+    <img src="@/assets/img/textlogo_2.png" alt="logo" />
     <p>서비스 이용을 위해 해당 양식을 입력해주세요.</p>
     <div class="form-modal">
       <div class="form-toggle">
@@ -100,37 +100,6 @@
 </template>
 
 <script>
-class AlertRabbitMQSocket {
-  constructor(uid) {
-    this.uid = uid;
-    let ws = new WebSocket('ws://k4d106.p.ssafy.io:15674/ws');
-    this.client = Stomp.over(ws);
-    this.client.debug = () => {};
-    this.login = 'illeum-guest';
-    this.passcode = 'illeum-guest';
-  }
-
-  connect() {
-    this.client.connect(
-      this.login,
-      this.passcode,
-      () => {
-        this.client.subscribe(`/amq/queue/member.${this.uid}`, (res) => {
-          push.create(res.body);
-        }); //큐명을 지정한경우 시 사용
-      },
-      (error) => {
-        console.log('소켓 연결 실패', error);
-        console.dir(error);
-      },
-      '/'
-    );
-  }
-  disconnect() {
-    this.client.disconnect();
-    // this.client.close();
-  }
-}
 import { registerUser } from '@/api/auth';
 import { required, max, email, confirmed } from 'vee-validate/dist/rules';
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate';
@@ -163,8 +132,7 @@ extend('password', {
   },
   message: '8자이상, 영어/숫자/특수문자 사용해주세요.',
 });
-
-import push from 'push.js';
+import { notification } from '@/api/alert';
 
 export default {
   name: 'Sign',
@@ -191,14 +159,14 @@ export default {
     toggleSignup() {
       document.getElementById('login-toggle').style.backgroundColor = '#fff';
       document.getElementById('login-toggle').style.color = '#222';
-      document.getElementById('signup-toggle').style.backgroundColor = '#38A897';
+      document.getElementById('signup-toggle').style.backgroundColor = '#756BFF';
       document.getElementById('signup-toggle').style.color = '#fff';
       document.getElementById('login-form').style.display = 'none';
       document.getElementById('signup-form').style.display = 'block';
     },
 
     toggleLogin() {
-      document.getElementById('login-toggle').style.backgroundColor = '#38A897';
+      document.getElementById('login-toggle').style.backgroundColor = '#756BFF';
       document.getElementById('login-toggle').style.color = '#fff';
       document.getElementById('signup-toggle').style.backgroundColor = '#fff';
       document.getElementById('signup-toggle').style.color = '#222';
@@ -255,9 +223,6 @@ export default {
             password: this.Lpassword,
           };
           await this.$store.dispatch('LOGIN', userData);
-          const mqSocket = new AlertRabbitMQSocket(this.$store.state.uuid);
-          this.$store.commit('setAlertSocket', mqSocket);
-          mqSocket.connect();
         }
       });
     },
@@ -266,6 +231,12 @@ export default {
 </script>
 
 <style scoped>
+@font-face {
+  font-family: 'S-CoreDream-3Light';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/S-CoreDream-3Light.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
 .input >>> .v-input__slot::before {
   border-style: none !important;
 }
@@ -279,7 +250,6 @@ export default {
   color: red;
 }
 
-@import url('https://fonts.googleapis.com/css?family=Montserrat|Quicksand');
 * {
   margin: 0;
   padding: 0;
@@ -307,6 +277,7 @@ img {
 .sign p {
   font-weight: 900;
   margin: 10px 0px;
+  font-family: 'S-CoreDream-3Light';
 }
 .form-modal {
   position: relative;
@@ -327,6 +298,7 @@ img {
   position: relative;
   text-transform: capitalize;
   font-size: 1em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
   z-index: 2;
   outline: none;
   background: #fff;
@@ -335,8 +307,9 @@ img {
 
 .form-modal .btn {
   border-radius: 20px;
-  font-weight: bold;
-  font-size: 1.2em;
+  /* font-weight: bold; */
+  font-size: 1.3em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
   padding: 0.8em 1em 0.8em 1em !important;
   transition: 0.5s;
   border: 1px solid #ebebeb;
@@ -347,13 +320,13 @@ img {
 
 .form-modal .login,
 .form-modal .signup {
-  background: #38a897;
+  background: #756bff;
   color: #fff;
 }
 
 .form-modal .login:hover,
 .form-modal .signup:hover {
-  background: #6173ff;
+  background: #41ea93;
 }
 
 .form-toggle {
@@ -369,8 +342,9 @@ img {
   margin-bottom: 1.5em;
   border: none;
   transition: 0.2s;
-  font-size: 1.1em;
-  font-weight: bold;
+  font-size: 1.2em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
+  /* font-weight: bold; */
   border-top-right-radius: 20px;
   border-top-left-radius: 20px;
 }
@@ -384,14 +358,14 @@ img {
 }
 
 #login-toggle {
-  background: #38a897;
+  background: #756bff;
   color: #ffff;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 #signup-toggle {
-  /* background: #38a897; */
+  /* background: ##2E95FF; */
   color: #000;
-  letter-spacing: 3px;
+  letter-spacing: 2px;
 }
 
 .form-modal form {
@@ -426,6 +400,7 @@ img {
   width: 100%;
   height: 70%;
   font-size: 1em;
+  font-family: 'quicksand', Arial, Helvetica, sans-serif;
   padding: 1em 1.7em 1em 1.7em;
   margin-top: 0.6em;
   margin-bottom: 0.6em;

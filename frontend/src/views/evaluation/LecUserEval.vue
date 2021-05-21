@@ -1,9 +1,8 @@
 <template>
-  <div>
-    <h2>평가</h2>
+  <div class="lec-user-eval">
     <v-row v-if="evalcheck">
-      <LecEvalPieChart :LeclearnData="LeclearnData" :key="change" />
-      <LecEvalRadarChart :LeclearnData="LeclearnData" :LecAverageData="LecAverageData" :key="renderKey" />
+      <LecEvalPieChart style="width:50%;" :LeclearnData="LeclearnData" :key="change" />
+      <LecEvalRadarChart style="width:50%;" :LeclearnData="LeclearnData" :LecAverageData="LecAverageData" :key="renderKey" />
     </v-row>
   </div>
 </template>
@@ -92,8 +91,6 @@ export default {
     // console.log(selected);
     this.evalcheck = true;
 
-    console.log(this.averageData);
-
     this.LeclearnData[0].per = this.each.attention;
     this.LeclearnData[1].per = this.each.distracted;
     this.LeclearnData[2].per = this.each.asleep;
@@ -121,4 +118,19 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+@font-face {
+  font-family: 'NEXON Lv1 Gothic OTF';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/NEXON Lv1 Gothic OTF.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+* {
+  font-family: 'NEXON Lv1 Gothic OTF';
+}
+.lec-user-eval {
+  margin: 3% 2%;
+
+  /* background: #f9f9f9; */
+}
+</style>

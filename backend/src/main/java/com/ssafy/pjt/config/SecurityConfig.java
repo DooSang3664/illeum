@@ -40,41 +40,51 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 				antMatchers("/swagger-ui.html").permitAll().antMatchers("/v2/api-docs").permitAll()
 				.antMatchers("/webjars/**").permitAll().
 
-				and().authorizeRequests().antMatchers("/api/**").permitAll().
-//				and().
-//                	authorizeRequests().
-//                	antMatchers("/api/image/**").permitAll().
-//				
-//				and().
-//                   authorizeRequests().
-//                   antMatchers("/api/member/user/login").permitAll().
-//                and().
-//                   authorizeRequests().
-//                   antMatchers("/api/member/user/refresh").permitAll().
-//				and().
-//                   authorizeRequests().
-//                   antMatchers("/api/member/admin/**").hasRole("ADMIN").
-//                and().
-//                   authorizeRequests().
-//                   antMatchers("/api/member/user/**").hasRole("USER").
-//                     
-//                and().
-//                    authorizeRequests().
-//                    antMatchers("/api/room/findAll").permitAll().
-//                and().
-//                    authorizeRequests().
-//                    antMatchers("/api/room/findByRoomName").permitAll().
-//                and().
-//                    authorizeRequests().
-//                    antMatchers("/api/room/**").hasAnyRole("USER", "ADMIN").
-//                    
-//                and().
-//                    authorizeRequests().
-//                    antMatchers("/api/entrant/**").hasAnyRole("USER", "ADMIN").
-//                    
-//                and().             
-//                    authorizeRequests().
-//                    antMatchers("/api/evaluation/**").hasAnyRole("USER", "ADMIN").
+//				and().authorizeRequests().antMatchers("/api/**").permitAll().
+				and().
+                   authorizeRequests().
+                   antMatchers("/api/image/**").permitAll().
+		
+			    and().
+                   authorizeRequests().
+                   antMatchers("/api/member/user/login").permitAll().
+                and().
+                   authorizeRequests().
+                   antMatchers("/api/member/user/logout").permitAll().
+                and().
+                   authorizeRequests().
+                   antMatchers("/api/member/user/signup").permitAll().   
+                and().
+                   authorizeRequests().
+                   antMatchers("/api/member/user/checkemail").permitAll().
+                and().
+                   authorizeRequests().
+                   antMatchers("/api/member/user/refresh").hasAnyRole("USER", "ADMIN").
+				  and().
+                   authorizeRequests().
+                   antMatchers("/api/member/admin/**").hasRole("ADMIN").
+                and().
+                   authorizeRequests().
+                   antMatchers("/api/member/user/**").hasRole("USER").
+                and().
+                   authorizeRequests().
+                   antMatchers("/api/member/profile/**").hasAnyRole("USER", "ADMIN").
+                     
+                and().
+                    authorizeRequests().
+                    antMatchers("/api/room/**").hasAnyRole("USER", "ADMIN").
+                    
+                and().
+                    authorizeRequests().
+                    antMatchers("/api/entrant/**").hasAnyRole("USER", "ADMIN").
+                    
+                and().             
+                    authorizeRequests().
+                    antMatchers("/api/evaluation/**").hasAnyRole("USER", "ADMIN").
+                and().             
+                    authorizeRequests().
+                    antMatchers("/api/rtc/**").hasAnyRole("USER", "ADMIN").    
+                   
 
 				and().authorizeRequests().anyRequest().authenticated().and().exceptionHandling()
 				.authenticationEntryPoint(jwtAuthenticationEntryPoint).and()

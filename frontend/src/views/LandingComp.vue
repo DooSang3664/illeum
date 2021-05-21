@@ -58,7 +58,7 @@ export default {
   /* background-color: #fff; */
   /* float: right; */
   /* margin: 10% 0 10% 20%; */
-  margin: 3% 5%;
+  margin: -32% 25%;
   perspective: 1700px;
   transform: translateY(10%);
   transition: all ease 300ms;
@@ -112,7 +112,7 @@ export default {
   bottom: 0;
   height: 80px;
   width: 32.3vw;
-  background: hsl(171, 66%, 44%);
+  background: #41ea93;
   margin-left: 33%;
   text-align: center;
 }

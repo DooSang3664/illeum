@@ -123,7 +123,7 @@ export default {
     },
   },
   async created() {
-    this.url = 'https://k4d106.p.ssafy.io/profile/' + this.each.uid + '/256';
+    this.url = '/profile/' + this.each.uid + '/256';
 
     const { data } = await findByRidClass(this.rid);
     this.roomData = data;

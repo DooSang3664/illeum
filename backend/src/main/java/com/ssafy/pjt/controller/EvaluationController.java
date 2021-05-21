@@ -65,7 +65,7 @@ public class EvaluationController {
 	public Evaluation getByVid(@RequestParam int vid) {
 		return evaluationRepository.findByVid(vid);
 	}
-
+		
 	@ApiOperation(value = "조건으로 평가 조회")
 	@PostMapping(path = "/roomEntrantInfo")
 	public ResponseEntity<Object> roomEntrantInfo(@RequestBody insertRoomEvaluationDto dto) {
@@ -88,6 +88,9 @@ public class EvaluationController {
 			Entrant entrant = entrantRepository.findByUidAndRid(insertDto.getUid(), insertDto.getRid());
 			if (entrant == null)
 				return new ResponseEntity<>("방에 참가한 사람이 아닙니다.", HttpStatus.NO_CONTENT);
+			if(roomRepository.findByRid(insertDto.getRid()).getUid() == insertDto.getUid()) {
+				return new ResponseEntity<>("개설자 입니다.", HttpStatus.NO_CONTENT);
+			}
 			if (evaluationMapper.seachEvaluation(entrant.getEid()) == null) {
 				Room room = roomRepository.findByRid(insertDto.getRid());
 				Evaluation evaluation = new Evaluation();
@@ -116,6 +119,9 @@ public class EvaluationController {
 			Entrant entrant = entrantRepository.findByUidAndRid(insertDto.getUid(), insertDto.getRid());
 			if (entrant == null)
 				return new ResponseEntity<>("방에 참가한 사람이 아닙니다.", HttpStatus.NO_CONTENT);
+			if(roomRepository.findByRid(insertDto.getRid()).getUid() == insertDto.getUid()) {
+				return new ResponseEntity<>("개설자 입니다.", HttpStatus.NO_CONTENT);
+			}
 			Evaluation evaluation = new Evaluation();
 			evaluation.setAttend("결석");
 			evaluation.setEid(entrant.getEid());

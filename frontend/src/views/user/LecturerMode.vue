@@ -1,72 +1,62 @@
 <template>
-  <div class="learner">
-    <v-card width="900">
-      <v-toolbar color="cyan" dark flat>
-        <v-toolbar-title>내가 강의하고 있는 강좌</v-toolbar-title>
-
-        <v-spacer></v-spacer>
-
-        <v-btn icon>
-          <v-icon>mdi-magnify</v-icon>
-        </v-btn>
-
-        <v-btn icon>
-          <v-icon>mdi-dots-vertical</v-icon>
-        </v-btn>
-
-        <template v-slot:extension>
-          <v-tabs v-model="tab" align-with-title>
-            <v-tabs-slider color="yellow"></v-tabs-slider>
-
-            <v-tab v-for="item in items" :key="item">
-              {{ item }}
-            </v-tab>
-          </v-tabs>
-        </template>
-      </v-toolbar>
-
-      <v-tabs-items v-model="tab">
-        <v-tab-item v-for="item in items" :key="item">
-          <v-card flat v-if="item == '준비'">
-            <LecturerReady>준비</LecturerReady>
-          </v-card>
-          <v-card flat v-else-if="item == '진행'">
-            <LecturerDoing>진행</LecturerDoing>
-          </v-card>
-          <v-card flat v-else-if="item == '완료'">
-            <LecturerCompleted>완료</LecturerCompleted>
-          </v-card>
-          <v-card flat v-else>
-            <LecturerEnd>종료</LecturerEnd>
-          </v-card>
-        </v-tab-item>
-      </v-tabs-items>
-    </v-card>
+  <div class="lecturer">
+    <v-tabs v-model="tab" slider-size="2" background-color="#f9f9f9">
+      <v-tabs-slider></v-tabs-slider>
+      <v-tab>
+        준비
+      </v-tab>
+      <v-tab>
+        완료
+      </v-tab>
+      <v-tab>
+        종료
+      </v-tab>
+    </v-tabs>
+    <v-tabs-items v-model="tab" width="1500" color="f4f4f4" style="background-color:#f9f9f9;">
+      <v-tab-item>
+        <v-card flat color="#f9f9f9">
+          <LecturerReady>준비</LecturerReady>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat color="#f9f9f9">
+          <LecturerCompleted>완료</LecturerCompleted>
+        </v-card>
+      </v-tab-item>
+      <v-tab-item>
+        <v-card flat color="#f9f9f9">
+          <LecturerEnd>종료</LecturerEnd>
+        </v-card>
+      </v-tab-item>
+    </v-tabs-items>
   </div>
 </template>
 
 <script>
 import LecturerReady from '@/views/user/LecturerReady.vue';
-import LecturerDoing from '@/views/user/LecturerDoing.vue';
+
 import LecturerCompleted from '@/views/user/LecturerCompleted.vue';
 import LecturerEnd from '@/views/user/LecturerEnd.vue';
 
 export default {
-  components: { LecturerReady, LecturerDoing, LecturerCompleted, LecturerEnd },
+  components: { LecturerReady, LecturerCompleted, LecturerEnd },
   data() {
     return {
       tab: null,
-      items: ['준비', '진행', '완료', '종료'],
-      texts:
-        'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
     };
   },
 };
 </script>
 
 <style scoped>
-.learner {
-  margin-left: 25%;
-  margin-top: 5%;
+.lecturer {
+  width: 1400px;
+}
+.v-tab {
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+.v-tab-item {
+  background-color: #000;
 }
 </style>

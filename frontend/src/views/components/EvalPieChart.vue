@@ -14,7 +14,7 @@ export default {
         datasets: [
           {
             label: 'Data One',
-            backgroundColor: ['#43a047', '#fb8c00', '#e53935', '#00acc1'],
+            backgroundColor: ['#FF625C', '#41EA93', '#61D4ED', '#756BFF', '#2E95FF'],
             data: [],
           },
         ],
@@ -26,8 +26,6 @@ export default {
     for (let i = 0; i < this.learnData.length; i++) {
       this.chartData.labels.push(this.learnData[i].data);
       this.chartData.datasets[0].data.push(this.learnData[i].per);
-
-      // 차트색 rgb 랜덤 추출
     }
   },
   mounted() {
