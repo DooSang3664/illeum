@@ -297,13 +297,13 @@ export default {
   letter-spacing: 2px;
   background: rgb(255, 98, 92);
   border: 0px solid black;
-  border-radius: 50px;
 
   padding: 12px 1rem;
   margin-right: 1rem;
   color: white;
   border-top-left-radius: 0px;
   border-bottom-left-radius: 0px;
+  border-radius: 50px;
 }
 
 fieldset {

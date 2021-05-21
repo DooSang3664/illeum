@@ -13,13 +13,6 @@
         </div>
       </v-sheet>
 
-      <!-- <v-btn v-if="this.$store.state.token" @click="signoutUser" tile color="#FFCD4A">
-        <v-icon left>
-          mdi-logout
-        </v-icon>
-        LOGOUT
-      </v-btn> -->
-      <!-- <v-divider></v-divider> -->
       <!-- 프로필 모달 -->
       <v-list class="">
         <v-row class="mx-2 pa-2">
@@ -250,8 +243,6 @@ export default {
         password: user_pw,
       };
       const { data } = await loginUser(userData);
-      // console.log(data);
-      // console.log(this.$store.state.uuid == data.member.uid);
 
       if (this.$store.state.uuid == data.member.uid) {
         const { value: formValues } = await this.$swal({
@@ -282,14 +273,7 @@ export default {
 
         paswword: value,
       };
-      const data = await editUser(userData);
-      console.log(data);
-      // if (data == 'success') {
-      //   this.$swal({
-      //     icon: 'success',
-      //     title: '수정완료되었습니다',
-      //   });
-      // }
+      await editUser(userData);
     },
   },
 };

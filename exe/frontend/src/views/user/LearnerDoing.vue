@@ -110,7 +110,6 @@ export default {
   },
   async created() {
     const { data } = await usePartinClass(this.$store.state.uuid);
-    console.log(data);
     if (data) {
       this.learnerDoing = true;
       this.classLi = data;

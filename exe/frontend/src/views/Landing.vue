@@ -81,9 +81,9 @@ export default {
 
 .section1 {
   background-image: url('../assets/img/teacher_edit.png');
+  background-size: cover;
   background-color: rgba(255, 255, 255, 0.1);
-  /* z-index: -1; */
-  /* opacity: 0.5; */
+
   background-size: cover;
   width: 100%;
   display: flex;
@@ -103,20 +103,19 @@ export default {
 
 .text-box {
   width: 50%;
-  margin-top: 1%;
+  margin-top: 1rem;
   font-family: 'S-CoreDream-3Light';
   color: #2c2b2b;
 }
 
 .section1 h1 {
   color: #4e4e4e;
-  margin-bottom: 5px;
+  margin-top: 1rem;
   font-size: 2.5em;
   letter-spacing: 2px;
 }
 
 .section1 p {
-  margin-top: 10px;
   color: hsl(201, 11%, 66%);
   font-size: 1.15em;
   line-height: 1.5em;
@@ -125,7 +124,7 @@ export default {
 .buttons {
   display: flex;
   flex-direction: row;
-  margin-top: 2%;
+  margin-top: 1%;
   margin-bottom: 10.5%;
   column-gap: 15px;
   padding-top: 15px;

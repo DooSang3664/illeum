@@ -237,7 +237,6 @@ export default {
   async created() {
     this.classLi = [];
     const { data } = await userEvalList(this.$store.state.uuid);
-    console.log(data);
     if (data) {
       this.learnerDoing = true;
       this.classLi = data;
@@ -253,7 +252,6 @@ export default {
       //출결
       this.attend_time = value.attend_time;
       this.attend = value.attend;
-      console.log(this.attend);
       this.attendchk = false;
 
       this.roomName = value.room_name;

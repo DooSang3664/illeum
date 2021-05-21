@@ -77,15 +77,11 @@ export default {
     this.evalcheck = true;
     this.partinRank = [];
     this.attendRank = [];
-    this.fetchRoomlen = 0;
     this.afkchk = false;
+    this.fetchRoomlen = 0;
     const res = await evaluateList(this.rid);
-    console.log(res.data);
-    console.log(this.each);
     var maxPartin = 0;
-    var first = 100000;
     //채팅참여도1등, 출석1등 구하기
-    console.log(res.data);
     for (var j = 0; j < res.data.length; j++) {
       if (res.data[j].eval_date.slice(0, 10) == this.each.eval_date.slice(0, 10)) {
         this.partinRank.push({ uid: res.data[j].uid, participation: res.data[j].participation, vid: res.data[j].vid });
@@ -120,8 +116,6 @@ export default {
       if (this.partinRank[k].uid === this.each.uid && this.partinRank[k].vid === this.each.vid) {
         this.partuidRank = this.partinRank.indexOf(this.partinRank[k]) + 1;
         break;
-      } else if (this.partinRank[k].uid === this.$store.state.uuid && this.partinRank[k].participation == 0) {
-        this.zeroPartinchk = true;
       }
     }
   },

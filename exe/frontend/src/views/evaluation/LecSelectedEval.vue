@@ -287,7 +287,6 @@ export default {
     await findByRidClass(this.rid).then(({ data }) => {
       this.roomData = data;
     });
-    console.log(this.roomData);
     this.roomName = this.roomData.room_name;
     await fetchCondition({ rid: this.rid }).then(({ data }) => {
       this.userEvalAll = data;

@@ -1,23 +1,7 @@
 import Push from 'push.js';
 
-// this.$toast("I'm a toast!", {
-//   position: 'bottom-right',
-//   timeout: 5000,
-//   closeOnClick: true,
-//   pauseOnFocusLoss: true,
-//   pauseOnHover: true,
-//   draggable: true,
-//   draggablePercent: 0.3,
-//   showCloseButtonOnHover: false,
-//   hideProgressBar: true,
-//   closeButton: 'button',
-//   icon: true,
-//   rtl: false,
-// });
-
 class AlertRabbitMQSocket {
   constructor(uid, msgCallback) {
-    console.log(msgCallback);
     this.uid = uid;
     let ws = new WebSocket(`${window.location.protocol.replace('http', 'ws')}//${window.location.host}/api/rabbitmq/`);
     this.client = Stomp.over(ws);
@@ -33,7 +17,6 @@ class AlertRabbitMQSocket {
       this.passcode,
       () => {
         this.client.subscribe(`/amq/queue/member.${this.uid}`, (res) => {
-          console.log('큐 메세지', res);
           let message;
           if (Push.Permission.has()) {
             if (res.headers['content-type'] == 'application/json') {
@@ -72,7 +55,6 @@ class Notification {
 
   connect() {
     if (isConnected == false) {
-      console.log('rabbitmq 연결');
       this.socket.connect();
       isConnected = true;
     }
@@ -80,7 +62,6 @@ class Notification {
 
   disconnect() {
     if (isConnected == true) {
-      console.log('rabbitmq 연결중단');
       this.socket.disconnect();
       instance = null;
       isConnected = false;

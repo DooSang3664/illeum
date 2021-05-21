@@ -11,7 +11,6 @@
                     <v-img :src="url" id="preview" alt=""></v-img>
                   </label>
                   <div class="content">
-                    <div>rid:{{ item.rid }}</div>
                     <div class="class-name">{{ item.room_name }}</div>
                     <div class="title">
                       <v-icon>mdi-account-circle</v-icon>
@@ -83,7 +82,6 @@ export default {
   async created() {
     this.url = '/profile/' + this.$store.state.uuid + '/256';
     const { data } = await userClasslist(this.$store.state.uuid);
-    console.log(data);
     if (data) {
       this.LecturerCompleted = true;
       this.classLi = data;

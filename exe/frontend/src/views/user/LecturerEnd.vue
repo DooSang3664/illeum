@@ -83,7 +83,6 @@ export default {
   async created() {
     this.url = '/profile/' + this.$store.state.uuid + '/256';
     const { data } = await userClasslist(this.$store.state.uuid);
-    console.log(data);
     if (data) {
       this.learnerEnd = true;
       this.classLi = data;

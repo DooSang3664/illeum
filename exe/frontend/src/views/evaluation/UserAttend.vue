@@ -200,8 +200,6 @@ export default {
       this.attend = '';
       for (var i = 0; i < this.eval.length; i++) {
         if (this.eval[i].room_name == selected && this.date == this.eval[i].eval_date.slice(0, 10)) {
-          console.log(this.date);
-          console.log(this.eval[i].eval_date.slice(0, 10));
           this.attend_time = this.eval[i].attend_time;
           this.attend = this.eval[i].attend;
           break;

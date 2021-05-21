@@ -104,7 +104,6 @@ export default new Vuex.Store({
     },
     async TEST({ commit }, test) {
       const data = test;
-      console.log(date);
       commit('setTest', data);
     },
   },

@@ -88,7 +88,6 @@ export default {
     this.per3 = 0;
     this.per4 = 0;
     this.per5 = 0;
-    // console.log(selected);
     this.evalcheck = true;
 
     this.LeclearnData[0].per = this.each.attention;

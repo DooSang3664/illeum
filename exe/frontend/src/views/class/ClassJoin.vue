@@ -97,24 +97,19 @@ export default {
         var uid = this.$store.state.uuid;
         var rid = value.rid;
         var insertInfo = { uid: uid, rid: rid };
-        try {
-          const { data } = await insertRoom(insertInfo);
-          if (data != null) {
-            this.$swal({
-              icon: 'warning',
-              showCancelButton: true,
-              title: '해당 수업을 신청을 하겠습니까?',
-              cancelButtonColor: '#d33',
-              confirmButtonText: '확인',
-              cancelButtonText: '취소',
-            });
+
+        this.$swal({
+          icon: 'warning',
+          showCancelButton: true,
+          title: '해당 수업을 신청을 하겠습니까?',
+          cancelButtonColor: '#d33',
+          confirmButtonText: '확인',
+          cancelButtonText: '취소',
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await insertRoom(insertInfo);
           }
-        } catch {
-          this.$swal({
-            icon: 'error',
-            title: '클래스 참여 오류.!!',
-          });
-        }
+        });
       }
     },
   },

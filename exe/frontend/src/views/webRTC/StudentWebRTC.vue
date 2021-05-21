@@ -226,19 +226,11 @@ export default {
       });
     });
     await this.$loadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js')
-      .then(() => {
-        console.log('RTCMultiConnection Load...');
-      })
-      .catch(() => {
-        console.log('RTCMultiConnection failed...');
-      });
+      .then(() => {})
+      .catch(() => {});
     await this.$loadScript('https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js')
-      .then(() => {
-        console.log('socket.io Load...');
-      })
-      .catch(() => {
-        console.log('socket.io failed...');
-      });
+      .then(() => {})
+      .catch(() => {});
 
     var left = document.getElementById('drag-left');
     var bar = document.getElementById('dragbar');
@@ -358,7 +350,6 @@ export default {
       };
 
       const { data } = await faceAI(userData);
-      console.log(data);
     },
     chat() {
       var chatMessage = this.message;
@@ -717,7 +708,8 @@ export default {
           };
           await updateByVid(evaluationData)
             .then(({ data }) => {
-              if (data == 'success') console.log(evaluationData + '수정 성공');
+              if (data == 'success') {
+              }
             })
             .catch((err) => {});
         }

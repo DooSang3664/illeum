@@ -375,7 +375,6 @@ export default {
         }
       }
       this.userEvalLength = this.userEval.length;
-      console.log(this.userEvalLength);
     },
     async getList(chipCheck) {
       this.userEval = [];

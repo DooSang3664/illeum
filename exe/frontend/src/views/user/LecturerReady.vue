@@ -86,12 +86,10 @@ export default {
   async created() {
     this.url = '/profile/' + this.$store.state.uuid + '/256';
     const { data } = await userClasslist(this.$store.state.uuid);
-    console.log(data);
     if (data) {
       this.lecturerReady = true;
       this.classLi = data;
     }
-    console.log(this.classLi);
   },
   mounted() {
     let cdn1 = document.createElement('script');
@@ -125,7 +123,6 @@ export default {
               const { data } = await updateClass({ rid: value.rid, room_state: '진행' }); // PUT: /api/room/updateByRid
               if (data == 'success') {
                 const { data } = await start(value.rid); // GET: /api/rtc/start (rabbitMQ)
-                console.log(data);
                 if (data == 'success') this.$router.push({ name: 'TeacherWebRTC', query: { room_name: value.room_name, rid: value.rid } });
               }
             } catch {

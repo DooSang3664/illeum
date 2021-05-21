@@ -66,11 +66,7 @@ export default {
       setTimeout(function() {
         ref.time = setInterval(
           ref.checkDeviceSupport(ref, () => {
-            console.log('사용 가능한 상태인지 체크 중');
             if (!ref.hasWebcam /*|| ref.isWebcamAlreadyCaptured*/) {
-              console.log('카메라를 사용할 수 없어요.');
-              //alert('카메라가 없거나 사용중 또는 웹의 권한이 없어 화상회의를 사용할 수 없는 상태입니다.');
-              // alert('카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.');
               this.$swal({
                 icon: 'error',
                 title: '카메라가 인식되지 않습니다. 연결 상태를 확인해주세요.!!',
@@ -136,7 +132,6 @@ export default {
               const { data } = await updateClass({ rid: value.rid, room_state: '진행', start_time }); // PUT: /api/room/updateByRid
               if (data == 'success') {
                 const { data } = await start(value.rid); // GET: /api/rtc/start (rabbitMQ)
-                console.log(data);
                 if (data == 'success') this.$router.push({ name: 'TeacherWebRTC', query: { room_name: value.room_name, rid: value.rid } });
               }
             } catch {

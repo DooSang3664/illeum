@@ -224,19 +224,11 @@ export default {
       });
     });
     await this.$loadScript('https://cdn.jsdelivr.net/npm/rtcmulticonnection@latest/dist/RTCMultiConnection.min.js')
-      .then(() => {
-        console.log('RTCMultiConnection Load...');
-      })
-      .catch(() => {
-        console.log('RTCMultiConnection failed...');
-      });
+      .then(() => {})
+      .catch(() => {});
     await this.$loadScript('https://rtcmulticonnection.herokuapp.com/socket.io/socket.io.js')
-      .then(() => {
-        console.log('socket.io Load...');
-      })
-      .catch(() => {
-        console.log('socket.io failed...');
-      });
+      .then(() => {})
+      .catch(() => {});
 
     var left = document.getElementById('drag-left');
     var bar = document.getElementById('dragbar');
@@ -462,7 +454,6 @@ export default {
             document.querySelector('.hoverEffect').innerHTML = '<span class="material-icons">face</span>' + event.extra.userFullName;
           };
           video.onmouseout = function() {
-            console.log(video);
             document.querySelector('.hoverEffect').innerHTML = '';
           };
         } else if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
@@ -510,11 +501,9 @@ export default {
 
       this.connection.onstreamended = function(event) {
         ref.connection.onleave = function(e) {
-          var screenId = event.mediaElement.id;
           ref.connection.getAllParticipants().forEach((participantId) => {
             if (e.userid == participantId) {
               for (let index = 0; index < ref.videoId.length; index++) {
-                console.log(ref.videoId[index].userFullName == e.extra.userFullName);
                 if (ref.videoId[index].userFullName == e.extra.userFullName) {
                   if (document.querySelector('#' + ref.videoId[index].id) != null) {
                     document.querySelector('#' + ref.videoId[index].id).remove();
@@ -523,7 +512,6 @@ export default {
               }
             }
           });
-          // if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         };
 
         if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
@@ -538,7 +526,6 @@ export default {
             elem.style.width = '30%';
           });
         } else if (event.extra.userUUID != ref.$store.state.uuid) {
-          console.log(event);
           const idx = ref.names.findIndex(function(item) {
             return item.name == event.extra.userFullName;
           });
@@ -548,7 +535,6 @@ export default {
           var screenId = event.mediaElement.id;
           if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         }
-        console.log(event);
       };
     },
 
@@ -583,7 +569,6 @@ export default {
         for (let index = 0; index < this.userUIDList.length; index++) {
           await insertAbsent({ rid: this.$route.query.rid, uid: this.userUIDList[index] }).then(({ data }) => {
             if (data != null) {
-              console.log(data.eid + ' 결석처리완료');
             }
           });
         }

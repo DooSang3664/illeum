@@ -66,9 +66,6 @@ export default {
     selected: [],
   }),
 
-  created() {
-    console.log('attend', this.attend);
-  },
   computed: {
     allSelected() {
       return this.selected.length === this.items.length;
