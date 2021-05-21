@@ -165,8 +165,7 @@ illeum은 인공지능을 활용한 교육 목적의 화상 플랫폼으로 기�
 # 📒 Documents
 
 - ![중간 발표 PPT](documents/발표/자율PJT_중간발표.pptx)
-- 최종 발표 PPT
-- 최종 UCC
+- ![최종 발표 PPT](documents/발표/자율PJT_구미1반_D106.pptx)
 
 # 🚂 Contributer
 
