@@ -1,4 +1,5 @@
 import store from '@/store/index';
+import Vue from 'vue';
 
 export function setInterceptors(instance) {
   // Add a request interceptor
@@ -10,6 +11,21 @@ export function setInterceptors(instance) {
     },
     function(error) {
       // Do something with request error
+      if (error.response.status === 401) {
+        Vue.swal({
+          icon: 'warning',
+          title: '세션만료',
+          text: '다시 로그인 해주세요',
+          confirmButtonText: '확인',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'sign';
+          }
+        });
+      }
+
       return Promise.reject(error);
     }
   );
@@ -24,6 +40,21 @@ export function setInterceptors(instance) {
     function(error) {
       // Any status codes that falls outside the range of 2xx cause this function to trigger
       // Do something with response error
+      if (error.response.status === 401) {
+        Vue.swal({
+          icon: 'warning',
+          title: '세션만료',
+          text: '다시 로그인 해주세요',
+          confirmButtonText: '확인',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = 'sign';
+          }
+        });
+      }
+
       return Promise.reject(error);
     }
   );

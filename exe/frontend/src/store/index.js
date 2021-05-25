@@ -4,6 +4,7 @@ import createPersistedState from 'vuex-persistedstate';
 import { loginUser } from '@/api/auth';
 import router from '@/router/index';
 import { notification } from '@/api/alert';
+
 Vue.use(Vuex);
 
 export default new Vuex.Store({

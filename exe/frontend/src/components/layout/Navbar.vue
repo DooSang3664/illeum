@@ -225,7 +225,7 @@ export default {
       } else {
         this.$swal({
           icon: 'error',
-          title: '로그아웃 실패',
+          title: '세션이 만료되었습니다. 다시 로그인해주세요',
         });
       }
     },

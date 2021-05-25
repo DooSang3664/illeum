@@ -451,7 +451,7 @@ export default {
             icon: 'error',
             title: '개설되지 않는 화상수업입니다.!!',
           });
-          ref.$router.push({ name: 'WebRTCListAll' });
+          ref.$router.push({ name: 'WebRTCListStudent' });
         }
       });
 
