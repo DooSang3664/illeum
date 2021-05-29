@@ -533,7 +533,8 @@ export default {
             ref.names.splice(idx, 1);
           }
           var screenId = event.mediaElement.id;
-          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
+          var video = document.getElementById(screenId);
+          if (video !== null) video.remove();
         }
       };
     },
@@ -593,29 +594,28 @@ export default {
                 toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
               },
             });
-
-            ref.connection.autoCloseEntireSession = true;
-
-            ref.connection.getAllParticipants().forEach((participantId) => {
-              ref.connection.disconnectWith(participantId);
-            });
-
-            ref.connection.attachStreams.forEach(function(localStream) {
-              localStream.stop();
-            });
-
-            ref.connection.closeSocket();
-            ref.connection.disconnect();
-
-            ref.$router.push({ name: 'WebRTCListTeacher' });
           }
         })
         .catch((err) => {
-          this.$swal({
-            icon: 'error',
-            title: '화상수업 종료 오류.!!',
-          });
+          // this.$swal({
+          //   icon: 'error',
+          //   title: '화상수업 종료 오류.!!',
+          // });
         });
+      ref.connection.autoCloseEntireSession = true;
+
+      ref.connection.getAllParticipants().forEach((participantId) => {
+        ref.connection.disconnectWith(participantId);
+      });
+
+      ref.connection.attachStreams.forEach(function(localStream) {
+        localStream.stop();
+      });
+
+      ref.connection.closeSocket();
+      ref.connection.disconnect();
+
+      ref.$router.push({ name: 'WebRTCListTeacher' });
     },
     saveMessageLog() {
       var date = new Date();

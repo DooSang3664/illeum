@@ -133,10 +133,10 @@
         </validation-provider>
 
         <v-btn class="mr-4" color="#2E95FF" dark type="submit">
-          submit
+          생성
         </v-btn>
         <v-btn class="mr-4" color="#2E95FF" dark @click="clear">
-          clear
+          초기화
         </v-btn>
       </form>
     </validation-observer>
