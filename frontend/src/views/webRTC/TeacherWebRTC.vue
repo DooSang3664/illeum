@@ -480,9 +480,9 @@ export default {
         ref.names.push({ name: ref.connection.extra.userFullName, avatar: '/profile/' + ref.connection.extra.userUUID + '/256' });
       };
 
-      this.connection.onleave = function(event) {
-        var ref = this;
-      };
+      // this.connection.onleave = function(event) {
+      //   var ref = this;
+      // };
 
       this.connection.onmute = function(e) {
         var posterImg = require('@/assets/img/poster.png');
@@ -505,9 +505,11 @@ export default {
             if (e.userid == participantId) {
               for (let index = 0; index < ref.videoId.length; index++) {
                 if (ref.videoId[index].userFullName == e.extra.userFullName) {
-                  if (document.querySelector('#' + ref.videoId[index].id) != null) {
-                    document.querySelector('#' + ref.videoId[index].id).remove();
-                  }
+                  var video = document.getElementById(ref.videoId[index].id);
+                  if (video !== null) video.remove();
+                  // if (document.querySelector('#' + ref.videoId[index].id) != null) {
+                  //   document.querySelector('#' + ref.videoId[index].id).remove();
+                  // }
                 }
               }
             }
