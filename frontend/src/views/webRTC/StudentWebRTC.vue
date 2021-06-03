@@ -425,8 +425,8 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      // this.connection.enableLogs = false; // to disable logs
-      this.connection.enableLogs = true; // to enable logs
+      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = true; // to enable logs
 
       this.connection.autoCloseEntireSession = true;
 
@@ -590,7 +590,6 @@ export default {
               }
             }
           });
-          // if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         };
 
         if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {

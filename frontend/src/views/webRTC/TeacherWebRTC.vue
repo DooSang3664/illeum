@@ -397,8 +397,8 @@ export default {
       };
 
       // 콘솔로그 출력 해제
-      // this.connection.enableLogs = false; // to disable logs
-      this.connection.enableLogs = true; // to enable logs
+      this.connection.enableLogs = false; // to disable logs
+      // this.connection.enableLogs = true; // to enable logs
 
       this.connection.checkPresence(this.roomid, function(isRoomExist, roomid) {
         if (isRoomExist === true) {
@@ -480,10 +480,6 @@ export default {
         ref.names.push({ name: ref.connection.extra.userFullName, avatar: '/profile/' + ref.connection.extra.userUUID + '/256' });
       };
 
-      // this.connection.onleave = function(event) {
-      //   var ref = this;
-      // };
-
       this.connection.onmute = function(e) {
         var posterImg = require('@/assets/img/poster.png');
         if (e.session.video) {
@@ -507,9 +503,6 @@ export default {
                 if (ref.videoId[index].userFullName == e.extra.userFullName) {
                   var video = document.getElementById(ref.videoId[index].id);
                   if (video !== null) video.remove();
-                  // if (document.querySelector('#' + ref.videoId[index].id) != null) {
-                  //   document.querySelector('#' + ref.videoId[index].id).remove();
-                  // }
                 }
               }
             }
