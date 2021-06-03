@@ -480,10 +480,6 @@ export default {
         ref.names.push({ name: ref.connection.extra.userFullName, avatar: '/profile/' + ref.connection.extra.userUUID + '/256' });
       };
 
-      this.connection.onleave = function(event) {
-        var ref = this;
-      };
-
       this.connection.onmute = function(e) {
         var posterImg = require('@/assets/img/poster.png');
         if (e.session.video) {
@@ -505,9 +501,8 @@ export default {
             if (e.userid == participantId) {
               for (let index = 0; index < ref.videoId.length; index++) {
                 if (ref.videoId[index].userFullName == e.extra.userFullName) {
-                  if (document.querySelector('#' + ref.videoId[index].id) != null) {
-                    document.querySelector('#' + ref.videoId[index].id).remove();
-                  }
+                  var video = document.getElementById(ref.videoId[index].id);
+                  if (video !== null) video.remove();
                 }
               }
             }
@@ -533,7 +528,8 @@ export default {
             ref.names.splice(idx, 1);
           }
           var screenId = event.mediaElement.id;
-          if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
+          var video = document.getElementById(screenId);
+          if (video !== null) video.remove();
         }
       };
     },
@@ -593,29 +589,28 @@ export default {
                 toast.addEventListener('mouseleave', ref.$swal.resumeTimer);
               },
             });
-
-            ref.connection.autoCloseEntireSession = true;
-
-            ref.connection.getAllParticipants().forEach((participantId) => {
-              ref.connection.disconnectWith(participantId);
-            });
-
-            ref.connection.attachStreams.forEach(function(localStream) {
-              localStream.stop();
-            });
-
-            ref.connection.closeSocket();
-            ref.connection.disconnect();
-
-            ref.$router.push({ name: 'WebRTCListTeacher' });
           }
         })
         .catch((err) => {
-          this.$swal({
-            icon: 'error',
-            title: '화상수업 종료 오류.!!',
-          });
+          // this.$swal({
+          //   icon: 'error',
+          //   title: '화상수업 종료 오류.!!',
+          // });
         });
+      ref.connection.autoCloseEntireSession = true;
+
+      ref.connection.getAllParticipants().forEach((participantId) => {
+        ref.connection.disconnectWith(participantId);
+      });
+
+      ref.connection.attachStreams.forEach(function(localStream) {
+        localStream.stop();
+      });
+
+      ref.connection.closeSocket();
+      ref.connection.disconnect();
+
+      ref.$router.push({ name: 'WebRTCListTeacher' });
     },
     saveMessageLog() {
       var date = new Date();

@@ -590,7 +590,6 @@ export default {
               }
             }
           });
-          // if (document.querySelector('#' + screenId) != null) document.querySelector('#' + screenId).remove();
         };
 
         if (event.extra.type == 'share' || event.extra.typeAlpha == 'share') {
